@@ -1,0 +1,5 @@
+# ninja log v5
+410	498	1675367986223750697	AudioVisualizer	8c8da123acc3fb71
+1	410	1675367986135749820	CMakeFiles/AudioVisualizer.dir/main.cpp.o	b666d0050760606e
+0	71	1675368571601347466	CMakeFiles/AudioVisualizer.dir/main.cpp.o	b666d0050760606e
+71	111	1675368571637347799	AudioVisualizer	8c8da123acc3fb71

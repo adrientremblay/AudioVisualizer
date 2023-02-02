@@ -1,0 +1,3 @@
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/AudioVisualizer.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
