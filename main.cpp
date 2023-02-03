@@ -1,5 +1,6 @@
 #include <alsa/asoundlib.h>
 #include <iostream>
+#include <fftw3.h>
 
 int main() {
     int i;
@@ -87,6 +88,22 @@ int main() {
         }
         fprintf(stdout, "read %d done\n", i);
     }
+
+    std::cout << buffer << std::endl;
+
+    fftw_complex *in, *out;
+    fftw_plan p;
+
+    int N = sizeof(buffer);
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+
+    fftw_execute(p); /* repeat as needed */
+
+    fftw_destroy_plan(p);
+    fftw_free(in);
+    fftw_free(out);
 
     free(buffer);
 

@@ -11,11 +11,17 @@
 		"commands" : 
 		[
 			"add_executable",
-			"target_link_libraries"
+			"target_link_libraries",
+			"set_property",
+			"_pkg_create_imp_target",
+			"_pkg_recalculate",
+			"pkg_search_module",
+			"include_directories"
 		],
 		"files" : 
 		[
-			"CMakeLists.txt"
+			"CMakeLists.txt",
+			"/opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPkgConfig.cmake"
 		],
 		"nodes" : 
 		[
@@ -33,6 +39,36 @@
 				"file" : 0,
 				"line" : 12,
 				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 898,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 337,
+				"parent" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 318,
+				"parent" : 5
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 17,
+				"parent" : 0
 			}
 		]
 	},
@@ -43,6 +79,13 @@
 			[
 				{
 					"fragment" : "-g"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 7,
+					"path" : "/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW"
 				}
 			],
 			"language" : "CXX",
@@ -76,6 +119,11 @@
 			{
 				"backtrace" : 2,
 				"fragment" : "/usr/lib/x86_64-linux-gnu/libasound.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libfftw3.so",
 				"role" : "libraries"
 			}
 		],
