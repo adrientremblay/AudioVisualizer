@@ -23,33 +23,49 @@
 					]
 				},
 				{
-					"build" : "libs/gist",
+					"build" : "libs/Gist",
 					"childIndexes" : 
 					[
-						2
+						2,
+						3
 					],
-					"jsonFile" : "directory-libs.gist-Debug-8bc27a4428a7494a4e8a.json",
+					"jsonFile" : "directory-libs.Gist-Debug-fbef59561083131b0b9c.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.12"
+						"string" : "3.13"
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 1,
-					"source" : "libs/gist"
+					"source" : "libs/Gist"
 				},
 				{
-					"build" : "libs/gist/src",
-					"jsonFile" : "directory-libs.gist.src-Debug-53fdada4378245db905c.json",
+					"build" : "libs/Gist/src",
+					"jsonFile" : "directory-libs.Gist.src-Debug-ecdd5f8f9e8924b9537d.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.12"
+						"string" : "3.13"
 					},
 					"parentIndex" : 1,
 					"projectIndex" : 1,
-					"source" : "libs/gist/src",
+					"source" : "libs/Gist/src",
 					"targetIndexes" : 
 					[
 						1
+					]
+				},
+				{
+					"build" : "libs/Gist/libs/kiss_fft130",
+					"jsonFile" : "directory-libs.Gist.libs.kiss_fft130-Debug-d6f34028422a2b54410b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "libs/Gist/libs/kiss_fft130",
+					"targetIndexes" : 
+					[
+						2
 					]
 				}
 			],
@@ -75,13 +91,15 @@
 					"directoryIndexes" : 
 					[
 						1,
-						2
+						2,
+						3
 					],
 					"name" : "Gist",
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						1
+						1,
+						2
 					]
 				}
 			],
@@ -90,15 +108,22 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "AudioVisualizer::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-AudioVisualizer-Debug-149a8f704f225004d1e8.json",
+					"jsonFile" : "target-AudioVisualizer-Debug-08af734cd2d498a2c4f1.json",
 					"name" : "AudioVisualizer",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
-					"id" : "Gist::@9a672a244cdee26fc81b",
-					"jsonFile" : "target-Gist-Debug-313bf4f068dc8eb60eaa.json",
+					"id" : "Gist::@b5f73b6778f80fab185e",
+					"jsonFile" : "target-Gist-Debug-280e1c85fac4ee19896b.json",
 					"name" : "Gist",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "Kiss::@b3dea642ec332cd74ffb",
+					"jsonFile" : "target-Kiss-Debug-ff44dcb0d793f7fa7a22.json",
+					"name" : "Kiss",
 					"projectIndex" : 1
 				}
 			]

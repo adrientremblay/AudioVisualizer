@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/cmake_install.cmake")
+  include("/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/Gist/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

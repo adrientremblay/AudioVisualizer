@@ -1,8 +1,4 @@
 /opt/clion-2022.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/opt/clion-2022.2.3/bin/ninja/linux/ninja -G Ninja -S /home/adrien/Projects/AudioVisualizer -B /home/adrien/Projects/AudioVisualizer/cmake-build-debug
-CMake Error at CMakeLists.txt:20 (add_subdirectory):
-  add_subdirectory given source "libs/gist" which is not an existing
-  directory.
-
-
--- Configuring incomplete, errors occurred!
-See also "/home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/adrien/Projects/AudioVisualizer/cmake-build-debug

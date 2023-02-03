@@ -8,7 +8,7 @@
 	"installers" : [],
 	"paths" : 
 	{
-		"build" : "libs/gist",
-		"source" : "libs/gist"
+		"build" : "libs/Gist",
+		"source" : "libs/Gist"
 	}
 }

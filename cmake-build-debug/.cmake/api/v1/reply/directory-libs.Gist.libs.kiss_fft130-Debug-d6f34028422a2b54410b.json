@@ -8,7 +8,7 @@
 	"installers" : [],
 	"paths" : 
 	{
-		"build" : "libs/gist/src",
-		"source" : "libs/gist/src"
+		"build" : "libs/Gist/libs/kiss_fft130",
+		"source" : "libs/Gist/libs/kiss_fft130"
 	}
 }

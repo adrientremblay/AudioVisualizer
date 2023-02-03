@@ -1,5 +1,5 @@
 #include <alsa/asoundlib.h>
-#include "libs/gist/src/Gist.h"
+#include "libs/Gist/src/Gist.h"
 
 int main(int argc,char *argv[]) {
     snd_pcm_t *handle;

@@ -17,5 +17,6 @@ pkg_search_module(FFTW REQUIRED fftw3 IMPORTED_TARGET)
 include_directories(PkgConfig::FFTW)
 target_link_libraries     (${PROJECT_NAME} PkgConfig::FFTW)
 
-add_subdirectory(libs/gist)
-target_link_libraries (${PROJECT_NAME} Gist)
+add_subdirectory(libs/Gist)
+target_link_directories(${PROJECT_NAME} PRIVATE Gist/src)
+target_link_libraries(${PROJECT_NAME} Gist)

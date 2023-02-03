@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "libs/gist/src/libGist.a"
+			"path" : "libs/Gist/src/libGist.a"
 		}
 	],
 	"backtrace" : 1,
@@ -17,7 +17,7 @@
 		],
 		"files" : 
 		[
-			"libs/gist/src/CMakeLists.txt",
+			"libs/Gist/src/CMakeLists.txt",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
@@ -87,11 +87,11 @@
 				},
 				{
 					"backtrace" : 5,
-					"path" : "/home/adrien/Projects/AudioVisualizer/libs/gist/src/src"
+					"path" : "/home/adrien/Projects/AudioVisualizer/libs/Gist/src/src"
 				},
 				{
 					"backtrace" : 6,
-					"path" : "/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130"
+					"path" : "/home/adrien/Projects/AudioVisualizer/libs/Gist/src/../libs/kiss_fft130"
 				}
 			],
 			"language" : "CXX",
@@ -116,13 +116,20 @@
 			]
 		}
 	],
-	"id" : "Gist::@9a672a244cdee26fc81b",
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "Kiss::@b3dea642ec332cd74ffb"
+		}
+	],
+	"id" : "Gist::@b5f73b6778f80fab185e",
 	"name" : "Gist",
 	"nameOnDisk" : "libGist.a",
 	"paths" : 
 	{
-		"build" : "libs/gist/src",
-		"source" : "libs/gist/src"
+		"build" : "libs/Gist/src",
+		"source" : "libs/Gist/src"
 	},
 	"sourceGroups" : 
 	[
@@ -154,89 +161,89 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/AccelerateFFT.cpp",
+			"path" : "libs/Gist/src/AccelerateFFT.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "libs/gist/src/AccelerateFFT.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/CoreFrequencyDomainFeatures.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "libs/gist/src/CoreFrequencyDomainFeatures.h",
+			"path" : "libs/Gist/src/AccelerateFFT.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/CoreTimeDomainFeatures.cpp",
+			"path" : "libs/Gist/src/CoreFrequencyDomainFeatures.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "libs/gist/src/CoreTimeDomainFeatures.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/Gist.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "libs/gist/src/Gist.h",
+			"path" : "libs/Gist/src/CoreFrequencyDomainFeatures.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/MFCC.cpp",
+			"path" : "libs/Gist/src/CoreTimeDomainFeatures.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "libs/gist/src/MFCC.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/OnsetDetectionFunction.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "libs/gist/src/OnsetDetectionFunction.h",
+			"path" : "libs/Gist/src/CoreTimeDomainFeatures.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/WindowFunctions.cpp",
+			"path" : "libs/Gist/src/Gist.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "libs/gist/src/WindowFunctions.h",
+			"path" : "libs/Gist/src/Gist.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "libs/gist/src/Yin.cpp",
+			"path" : "libs/Gist/src/MFCC.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "libs/gist/src/Yin.h",
+			"path" : "libs/Gist/src/MFCC.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "libs/Gist/src/OnsetDetectionFunction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "libs/Gist/src/OnsetDetectionFunction.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "libs/Gist/src/WindowFunctions.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "libs/Gist/src/WindowFunctions.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "libs/Gist/src/Yin.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "libs/Gist/src/Yin.h",
 			"sourceGroupIndex" : 0
 		}
 	],

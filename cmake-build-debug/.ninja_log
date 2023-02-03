@@ -1,8 +1,19 @@
 # ninja log v5
-383	430	1675405640236532099	AudioVisualizer	f435300ce1bf9e4c
-0	33	1675406310539339043	build.ninja	18da8c7b34d869c2
-0	238	1675405945679627709	CMakeFiles/AudioVisualizer.dir/main.cpp.o	9514573b8025a0df
-0	35	1675406310539339043	build.ninja	18da8c7b34d869c2
-1	16	1675406310559339248	libs/gist/src/CMakeFiles/Gist.dir/AccelerateFFT.cpp.o	2f85af93aa4547c0
 16	221	1675406310767341365	libs/gist/src/CMakeFiles/Gist.dir/CoreFrequencyDomainFeatures.cpp.o	fee0355a0e9b5083
+383	430	1675405640236532099	AudioVisualizer	f435300ce1bf9e4c
+20	71	1675412051696653042	libs/Gist/src/CMakeFiles/Gist.dir/AccelerateFFT.cpp.o	31d1ac01603d4789
+1	16	1675406310559339248	libs/gist/src/CMakeFiles/Gist.dir/AccelerateFFT.cpp.o	2f85af93aa4547c0
+0	31	1675412609326260690	build.ninja	18da8c7b34d869c2
+71	395	1675412052020656298	libs/Gist/src/CMakeFiles/Gist.dir/CoreFrequencyDomainFeatures.cpp.o	1e8a97cf95cd416e
+22	421	1675411111303229554	libs/Gist/src/CMakeFiles/Gist.dir/OnsetDetectionFunction.cpp.o	9f2270e76b4f0ee7
+1	181	1675412062956766209	libs/Gist/src/CMakeFiles/Gist.dir/CoreTimeDomainFeatures.cpp.o	b547389526aeafeb
 2	243	1675406445864717754	libs/gist/src/CMakeFiles/Gist.dir/CoreTimeDomainFeatures.cpp.o	dc64fd6ea7be9555
+1	224	1675412177081913400	CMakeFiles/AudioVisualizer.dir/main.cpp.o	efc8a393c3728151
+1	415	1675412177273915330	libs/Gist/src/CMakeFiles/Gist.dir/Gist.cpp.o	510e5294f6f5fcb2
+1	293	1675412114157280835	libs/Gist/src/CMakeFiles/Gist.dir/Yin.cpp.o	8b50fced31f36488
+181	632	1675412063408770752	libs/Gist/src/CMakeFiles/Gist.dir/MFCC.cpp.o	f896fe1b33948d24
+3	631	1675411156983685066	libs/Gist/src/CMakeFiles/Gist.dir/WindowFunctions.cpp.o	2e21ba85f317183b
+415	441	1675412177297915572	libs/Gist/src/libGist.a	878a220a3d9559ad
+1	74	1675412613374301415	libs/Gist/libs/kiss_fft130/CMakeFiles/Kiss.dir/kiss_fft.c.o	dc71f66a57b915b5
+74	79	1675412613382301496	libs/Gist/libs/kiss_fft130/libKiss.a	bfe8bf4bd610ce0
+79	200	1675412613498302662	AudioVisualizer	b722f70a8b325afc

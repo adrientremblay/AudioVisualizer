@@ -831,7 +831,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "3"
+			"value" : "4"
 		},
 		{
 			"name" : "CMAKE_OBJCOPY",
@@ -1707,7 +1707,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist"
+			"value" : "/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/Gist"
 		},
 		{
 			"name" : "Gist_IS_TOP_LEVEL",
@@ -1731,7 +1731,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/adrien/Projects/AudioVisualizer/libs/gist"
+			"value" : "/home/adrien/Projects/AudioVisualizer/libs/Gist"
 		},
 		{
 			"name" : "PKG_CONFIG_ARGN",
