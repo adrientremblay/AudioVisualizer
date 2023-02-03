@@ -1,4 +1,5 @@
 #include <alsa/asoundlib.h>
+#include <iostream>
 #include "libs/Gist/src/Gist.h"
 
 int main(int argc,char *argv[]) {
@@ -11,6 +12,7 @@ int main(int argc,char *argv[]) {
         exit(1);
     }
 
+    // Setting up ALSA params
     snd_pcm_hw_params_t *params;
     /* Allocate a hardware parameters object. */
     snd_pcm_hw_params_alloca(&params);
@@ -23,8 +25,8 @@ int main(int argc,char *argv[]) {
     /* Non Interleaved mode */
     snd_pcm_hw_params_set_access(handle, params,SND_PCM_ACCESS_RW_INTERLEAVED);
 
-    /* Signed 16-bit little-endian format */
-    snd_pcm_hw_params_set_format(handle, params,SND_PCM_FORMAT_S16_LE);
+    /* Signed float format */
+    snd_pcm_hw_params_set_format(handle, params,SND_PCM_FORMAT_FLOAT);
 
     /* Two channels (stereo) */
     snd_pcm_hw_params_set_channels(handle, params, 2);
@@ -46,15 +48,14 @@ int main(int argc,char *argv[]) {
         exit(1);
     }
 
-    // Initializing GIST
-    int frameSize = 512;
-    int sampleRate = 44100;
-    Gist<float> gist (frameSize, sampleRate);
 
     /* Use a buffer large enough to hold one period */
     snd_pcm_hw_params_get_period_size(params, &frames_single_channel, &dir);
     int frames_per_read = frames_single_channel * 2; /* 2 bytes/sample, 2 channels */
-    char *frames_buffer = (char *) malloc(frames_per_read);
+    float *frames_buffer = (float *) malloc(frames_per_read * sizeof(float));
+
+    // Initializing GIST
+    Gist<float> gist (2, sample_rate);
 
     /* We want to loop for 5 seconds */
     snd_pcm_hw_params_get_period_time(params, &sample_rate, &dir);
@@ -72,9 +73,18 @@ int main(int argc,char *argv[]) {
             fprintf(stderr, "short read, read %d frames_single_channel\n", rc);
         }
 
+        float firstFrame[] = {frames_buffer[0], frames_buffer[1]};
+        std::cout << frames_buffer[0] << ' ' << frames_buffer[1] << std::endl;
+        gist.processAudioFrame(firstFrame, 2);
+        float specCent = gist.spectralCrest();
+        std::cout << specCent << std::endl;
+
+        /*
+        // Printing buffer
         frames_actually_read = write(1, frames_buffer, frames_per_read);
         if (frames_actually_read != frames_per_read)
             fprintf(stderr, "short write: wrote %d bytes\n", rc);
+        */
     }
 
     snd_pcm_drain(handle);
