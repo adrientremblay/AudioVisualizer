@@ -1,27 +1,10 @@
 #include <alsa/asoundlib.h>
 #include <iostream>
 
-struct audio_data_t {
-    double *cava_in;
-
-    int input_buffer_size;
-    int cava_buffer_size;
-
-    int format;
-    unsigned int rate;
-    unsigned int channels;
-    char *source;  // alsa device, fifo path or pulse source
-    int im;        // input mode alsa, fifo, pulse, portaudio, shmem or sndio
-    int terminate; // shared variable used to terminate audio thread
-    char error_message[1024];
-    int samples_counter;
-    int IEEE_FLOAT;
-    pthread_mutex_t lock;
-};
-
 int main() {
     int i;
     char* buffer;
+    int buffer_frames = 128;
     unsigned int rate = 44100;
     int error;
     snd_pcm_t *capture_handle;
@@ -36,6 +19,11 @@ int main() {
         return -1;
     }
     std::cout << "Audio interface opened!" << std::endl;
+
+    if ((error = snd_pcm_hw_params_malloc (&hw_params)) < 0) {
+        return -1;
+    }
+    fprintf(stdout, "hw_params allocated\n");
 
     error = snd_pcm_hw_params_any(capture_handle, hw_params);
     if (error < 0) {
@@ -72,6 +60,40 @@ int main() {
     if ((error = snd_pcm_hw_params (capture_handle, hw_params)) < 0) {
         return -1;
     }
+
+    fprintf(stdout, "hw_params setted\n");
+
+    snd_pcm_hw_params_free(hw_params);
+
+    fprintf(stdout, "hw_params freed\n");
+
+    if ((error = snd_pcm_prepare (capture_handle)) < 0) {
+        fprintf (stderr, "cannot prepare audio interface for use (%s)\n",
+                 snd_strerror (error));
+        exit (1);
+    }
+
+    fprintf(stdout, "audio interface prepared\n");
+
+    buffer = static_cast<char *>(malloc(128 * snd_pcm_format_width(format) / 8 * 2));
+
+    fprintf(stdout, "buffer allocated\n");
+
+    for (i = 0; i < 10; ++i) {
+        if ((error = snd_pcm_readi (capture_handle, buffer, buffer_frames)) != buffer_frames) {
+            fprintf (stderr, "read from audio interface failed (%s)\n",
+                     error, snd_strerror (error));
+            exit (1);
+        }
+        fprintf(stdout, "read %d done\n", i);
+    }
+
+    free(buffer);
+
+    fprintf(stdout, "buffer freed\n");
+
+    snd_pcm_close (capture_handle);
+    fprintf(stdout, "audio interface closed\n");
 
     return 0;
 }
