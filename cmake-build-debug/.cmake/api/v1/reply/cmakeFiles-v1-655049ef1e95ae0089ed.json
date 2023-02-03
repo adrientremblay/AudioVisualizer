@@ -150,6 +150,12 @@
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "/opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"path" : "libs/gist/CMakeLists.txt"
+		},
+		{
+			"path" : "libs/gist/src/CMakeLists.txt"
 		}
 	],
 	"kind" : "cmakeFiles",

@@ -1,3 +1,8 @@
 /home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/AudioVisualizer.dir
 /home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/adrien/Projects/AudioVisualizer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/CMakeFiles/edit_cache.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/CMakeFiles/rebuild_cache.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/src/CMakeFiles/Gist.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/src/CMakeFiles/edit_cache.dir
+/home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/src/CMakeFiles/rebuild_cache.dir

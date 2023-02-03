@@ -47,9 +47,10 @@ cmake_ninja_workdir = /home/adrien/Projects/AudioVisualizer/cmake-build-debug/
 #############################################
 # Order-only phony target for AudioVisualizer
 
-build cmake_object_order_depends_target_AudioVisualizer: phony || CMakeFiles/AudioVisualizer.dir
+build cmake_object_order_depends_target_AudioVisualizer: phony || cmake_object_order_depends_target_Gist
 
 build CMakeFiles/AudioVisualizer.dir/main.cpp.o: CXX_COMPILER__AudioVisualizer_Debug /home/adrien/Projects/AudioVisualizer/main.cpp || cmake_object_order_depends_target_AudioVisualizer
+  DEFINES = -DUSE_KISS_FFT
   DEP_FILE = CMakeFiles/AudioVisualizer.dir/main.cpp.o.d
   FLAGS = -g
   INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW
@@ -64,9 +65,9 @@ build CMakeFiles/AudioVisualizer.dir/main.cpp.o: CXX_COMPILER__AudioVisualizer_D
 #############################################
 # Link the executable AudioVisualizer
 
-build AudioVisualizer: CXX_EXECUTABLE_LINKER__AudioVisualizer_Debug CMakeFiles/AudioVisualizer.dir/main.cpp.o | /usr/lib/x86_64-linux-gnu/libasound.so /usr/lib/x86_64-linux-gnu/libfftw3.so
+build AudioVisualizer: CXX_EXECUTABLE_LINKER__AudioVisualizer_Debug CMakeFiles/AudioVisualizer.dir/main.cpp.o | /usr/lib/x86_64-linux-gnu/libasound.so libs/gist/src/libGist.a /usr/lib/x86_64-linux-gnu/libfftw3.so || libs/gist/src/libGist.a
   FLAGS = -g
-  LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libasound.so  /usr/lib/x86_64-linux-gnu/libfftw3.so
+  LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libasound.so  libs/gist/src/libGist.a  /usr/lib/x86_64-linux-gnu/libfftw3.so
   OBJECT_DIR = CMakeFiles/AudioVisualizer.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -98,7 +99,158 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/adrien/Projects/AudioVisualizer/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for edit_cache
+
+build libs/gist/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist && /opt/clion-2022.2.3/bin/cmake/linux/bin/ccmake -S/home/adrien/Projects/AudioVisualizer -B/home/adrien/Projects/AudioVisualizer/cmake-build-debug
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build libs/gist/edit_cache: phony libs/gist/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build libs/gist/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist && /opt/clion-2022.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/adrien/Projects/AudioVisualizer -B/home/adrien/Projects/AudioVisualizer/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build libs/gist/rebuild_cache: phony libs/gist/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/adrien/Projects/AudioVisualizer/libs/gist/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target Gist
+
+
+#############################################
+# Order-only phony target for Gist
+
+build cmake_object_order_depends_target_Gist: phony || libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/AccelerateFFT.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/AccelerateFFT.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/AccelerateFFT.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/CoreFrequencyDomainFeatures.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/CoreFrequencyDomainFeatures.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/CoreFrequencyDomainFeatures.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/CoreTimeDomainFeatures.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/CoreTimeDomainFeatures.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/CoreTimeDomainFeatures.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/Gist.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/Gist.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/Gist.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/MFCC.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/MFCC.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/MFCC.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/OnsetDetectionFunction.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/OnsetDetectionFunction.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/OnsetDetectionFunction.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/WindowFunctions.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/WindowFunctions.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/WindowFunctions.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+build libs/gist/src/CMakeFiles/Gist.dir/Yin.cpp.o: CXX_COMPILER__Gist_Debug /home/adrien/Projects/AudioVisualizer/libs/gist/src/Yin.cpp || cmake_object_order_depends_target_Gist
+  DEFINES = -DUSE_KISS_FFT
+  DEP_FILE = libs/gist/src/CMakeFiles/Gist.dir/Yin.cpp.o.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -I/home/adrien/Projects/AudioVisualizer/PkgConfig::FFTW -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/src -I/home/adrien/Projects/AudioVisualizer/libs/gist/src/../libs/kiss_fft130
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  OBJECT_FILE_DIR = libs/gist/src/CMakeFiles/Gist.dir
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target Gist
+
+
+#############################################
+# Link the static library libs/gist/src/libGist.a
+
+build libs/gist/src/libGist.a: CXX_STATIC_LIBRARY_LINKER__Gist_Debug libs/gist/src/CMakeFiles/Gist.dir/AccelerateFFT.cpp.o libs/gist/src/CMakeFiles/Gist.dir/CoreFrequencyDomainFeatures.cpp.o libs/gist/src/CMakeFiles/Gist.dir/CoreTimeDomainFeatures.cpp.o libs/gist/src/CMakeFiles/Gist.dir/Gist.cpp.o libs/gist/src/CMakeFiles/Gist.dir/MFCC.cpp.o libs/gist/src/CMakeFiles/Gist.dir/OnsetDetectionFunction.cpp.o libs/gist/src/CMakeFiles/Gist.dir/WindowFunctions.cpp.o libs/gist/src/CMakeFiles/Gist.dir/Yin.cpp.o
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = libs/gist/src/CMakeFiles/Gist.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = libs/gist/src/libGist.a
+  TARGET_PDB = Gist.a.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build libs/gist/src/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/src && /opt/clion-2022.2.3/bin/cmake/linux/bin/ccmake -S/home/adrien/Projects/AudioVisualizer -B/home/adrien/Projects/AudioVisualizer/cmake-build-debug
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build libs/gist/src/edit_cache: phony libs/gist/src/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build libs/gist/src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/src && /opt/clion-2022.2.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/adrien/Projects/AudioVisualizer -B/home/adrien/Projects/AudioVisualizer/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build libs/gist/src/rebuild_cache: phony libs/gist/src/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
 # Target aliases.
+
+build Gist: phony libs/gist/src/libGist.a
+
+build libGist.a: phony libs/gist/src/libGist.a
 
 # =============================================================================
 # Folder targets.
@@ -108,7 +260,21 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/adrien/Projects/AudioVisualizer/cmake-build-debug
 
-build all: phony AudioVisualizer
+build all: phony AudioVisualizer libs/gist/all
+
+# =============================================================================
+
+#############################################
+# Folder: /home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist
+
+build libs/gist/all: phony libs/gist/src/all
+
+# =============================================================================
+
+#############################################
+# Folder: /home/adrien/Projects/AudioVisualizer/cmake-build-debug/libs/gist/src
+
+build libs/gist/src/all: phony libs/gist/src/libGist.a
 
 # =============================================================================
 # Built-in targets
@@ -117,14 +283,14 @@ build all: phony AudioVisualizer
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindALSA.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageMessage.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPkgConfig.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../libs/gist/CMakeLists.txt ../libs/gist/src/CMakeLists.txt /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindALSA.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageMessage.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPkgConfig.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindALSA.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageMessage.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPkgConfig.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake: phony
+build ../CMakeLists.txt ../libs/gist/CMakeLists.txt ../libs/gist/src/CMakeLists.txt /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindALSA.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPackageMessage.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/FindPkgConfig.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-C.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-CXX.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux.cmake /opt/clion-2022.2.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake: phony
 
 
 #############################################
