@@ -1,0 +1,3 @@
+[submodule "libs/Gist"]
+	path = libs/Gist
+	url = git@github.com:adamstark/Gist.git
