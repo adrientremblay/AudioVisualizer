@@ -12,7 +12,8 @@ int main() {
         return -1;
     }
 
-    sf::
+    sf::SoundBufferRecorder recorder;
+    recorder.start();
 
     while (window.isOpen()) {
         sf::Event event;
@@ -26,6 +27,10 @@ int main() {
         window.draw(shape);
         window.display();
     }
+
+    recorder.stop();
+    const sf::SoundBuffer& buffer = recorder.getBuffer();
+    buffer.saveToFile("my_record.ogg");
 
     return 0;
 }
