@@ -76,7 +76,7 @@
 			{
 				"command" : 3,
 				"file" : 1,
-				"line" : 73,
+				"line" : 126,
 				"parent" : 7
 			},
 			{
@@ -151,6 +151,11 @@
 			{
 				"backtrace" : 3,
 				"fragment" : "/usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1",
 				"role" : "libraries"
 			},
 			{

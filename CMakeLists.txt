@@ -33,7 +33,7 @@ target_include_directories(${PROJECT_NAME}
         )
 
 # Link executable to required SFML libraries
-target_link_libraries(${PROJECT_NAME} sfml-graphics)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio)
 
 # Install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

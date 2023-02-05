@@ -64,9 +64,9 @@ build CMakeFiles/AudioVisualizer.dir/main.cpp.o: CXX_COMPILER__AudioVisualizer_D
 #############################################
 # Link the executable AudioVisualizer
 
-build AudioVisualizer: CXX_EXECUTABLE_LINKER__AudioVisualizer_Debug CMakeFiles/AudioVisualizer.dir/main.cpp.o | /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+build AudioVisualizer: CXX_EXECUTABLE_LINKER__AudioVisualizer_Debug CMakeFiles/AudioVisualizer.dir/main.cpp.o | /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
   FLAGS = -g
-  LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+  LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
   OBJECT_DIR = CMakeFiles/AudioVisualizer.dir
   POST_BUILD = :
   PRE_LINK = :
