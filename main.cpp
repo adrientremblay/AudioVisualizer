@@ -8,31 +8,22 @@
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
 void processSignal(sf::SoundBuffer soundBuffer);
 
-constexpr unsigned int PERIOD = 50;
+constexpr unsigned int PERIOD = 20;
 constexpr unsigned int BINS = PERIOD / 2;
 
 int main() {
-    if (!sf::SoundBufferRecorder::isAvailable()) {
-        std::cerr << "Yo the sound buffer recorder isn't available... fix it." << std::endl;
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile("../audio/raver.wav")) {
+        std::cerr << "Could not load RAVER.mp3!!!" << std::endl;
         return -1;
     }
 
-    std::vector<std::string> devices = sf::SoundRecorder::getAvailableDevices();
-    std::string defaultDevice = sf::SoundRecorder::getDefaultDevice();
+    sf::Sound sound;
+    sound.setBuffer(buffer);
+    sound.play();
 
-    sf::SoundBufferRecorder* recorder = new sf::SoundBufferRecorder();
-    recorder->setDevice(devices[1]);
-    recorder->start();
-
-    while (1)  {
-        recorder->stop();
-        if (recorder->getBuffer().getSampleCount() >= PERIOD) {
-            processSignal(recorder->getBuffer());
-            delete recorder;
-            recorder = new sf::SoundBufferRecorder();
-            recorder->setDevice(devices[1]);
-        }
-        recorder->start();
+    while (true)  {
+        //processSignal(buffer);
     }
     return 0;
 }
@@ -42,7 +33,6 @@ void processSignal(sf::SoundBuffer soundBuffer) {
     const sf::Int16* samples = soundBuffer.getSamples();
     std::size_t N = soundBuffer.getSampleCount();
     //buffer.saveToFile("my_record.ogg");
-    std::cout << N << std::endl;
 
     double* fftw_in  = fftw_alloc_real(N);
 
