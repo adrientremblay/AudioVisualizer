@@ -10,6 +10,9 @@
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
 void processSignal(sf::SoundBuffer soundBuffer);
 
+constexpr unsigned int WINDOW_WIDTH = 1024;
+constexpr unsigned int WINDOW_HEIGHT = 700;
+
 constexpr unsigned int PERIOD = 1024;
 constexpr unsigned int BINS = PERIOD / 2;
 
@@ -29,15 +32,14 @@ int main() {
     fftStream.setCtx(normalizedOutputFFT);
     fftStream.play();
 
-    sf::RenderWindow window(sf::VideoMode(1024, 700), "Audio Visualizer");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
 
     std::vector<sf::RectangleShape> bins;
-
     bins.reserve(BINS);
-    for (int i = 0 ; i < 512 ; i++) {
+    for (int i = 0 ; i < BINS ; i++) {
         sf::RectangleShape rect;
-        rect.setSize(sf::Vector2f(1024 / 2, i));
-        rect.setPosition(sf::Vector2f(i * 2, 700 - i));
+        rect.setSize(sf::Vector2f(WINDOW_WIDTH / BINS, i));
+        rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / BINS), WINDOW_HEIGHT - i));
         rect.setFillColor(sf::Color::Green);
         bins.push_back(rect);
     }
@@ -50,10 +52,10 @@ int main() {
 
         window.clear();
 
-        for (int i = 0 ; i < 512 ; i++) {
+        for (int i = 0 ; i < BINS ; i++) {
             sf::RectangleShape rect = bins[i];
-            rect.setSize(sf::Vector2f (2, abs(normalizedOutputFFT[i])));
-            rect.setPosition(sf::Vector2f (i*2, 700 - abs(normalizedOutputFFT[i])));
+            rect.setSize(sf::Vector2f(WINDOW_WIDTH / BINS, abs(normalizedOutputFFT[i])));
+            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / BINS), WINDOW_HEIGHT - abs(normalizedOutputFFT[i])));
 
             window.draw(rect);
         }
