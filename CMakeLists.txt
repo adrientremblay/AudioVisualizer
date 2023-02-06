@@ -23,6 +23,11 @@ find_package(SFML 2.5
         system window graphics network audio REQUIRED
         )
 
+find_package(PkgConfig REQUIRED)
+pkg_search_module(FFTW REQUIRED fftw3 IMPORTED_TARGET)
+include_directories(PkgConfig::FFTW)
+link_libraries     (PkgConfig::FFTW)
+
 # Compile executable
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -33,7 +38,7 @@ target_include_directories(${PROJECT_NAME}
         )
 
 # Link executable to required SFML libraries
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio )
 
 # Install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

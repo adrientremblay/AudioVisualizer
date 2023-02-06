@@ -3,11 +3,11 @@
 #include <iostream>
 #include <cmath>
 #include <complex>
+#include <fftw3.h>
+
+std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
 
 int main() {
-
-
-    /*
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -38,28 +38,45 @@ int main() {
     }
 
     recorder.stop();
+
+    // The samples are in time domain, they represent a sequence of amplitudes -> the position of the speaker cone
     const sf::SoundBuffer& buffer = recorder.getBuffer();
-    //buffer.saveToFile("my_record.ogg");
-
     const sf::Int16* samples = buffer.getSamples();
-    std::size_t count = buffer.getSampleCount();
+    std::size_t N = buffer.getSampleCount();
+    //buffer.saveToFile("my_record.ogg");
+    std::cout << N << std::endl;
 
-    sf::SoundBuffer Buffer;
-    if (!Buffer.loadFromSamples(samples, count, 1, buffer.getSampleRate())) {
-        std::cerr << "Loading failed!" << std::endl;
-        return 1;
+    double* fftw_in  = fftw_alloc_real(N);
+
+    for (int i = 0 ; i < N ; i++) {
+        fftw_in[i] = static_cast<double>(samples[i]);
     }
 
-    sf::Sound Sound;
-    Sound.setBuffer(Buffer);
-    Sound.setLoop(true);
-    Sound.play();
-    while (1) {
-        sf::sleep(sf::milliseconds(100));
+    fftw_complex* fftw_out  = fftw_alloc_complex(N);
+
+    // todo: window function
+
+    // todo: this casting might be bad
+    fftw_plan plan = fftw_plan_dft_r2c_1d(N, fftw_in, fftw_out, FFTW_ESTIMATE);
+    fftw_execute(plan);
+
+    const int BIN_SIZE = 5000;
+    std::vector<double> bins;
+
+    // Calculating magnitudes
+    for (int i = 0 ; i < N / 2 ; i++) {
+        double real = fftw_out[i][0];
+        double imag = fftw_out[i][1];
+        fftw_out[i][0] = sqrt(real * real + imag * imag);
+        fftw_out[i][1] = 0;
+        std:: cout << fftw_out[i][0] << ' ';
     }
+
+    fftw_destroy_plan(plan);
+    fftw_free(fftw_out);
+
 
     return 0;
-    */
 }
 
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x) {
