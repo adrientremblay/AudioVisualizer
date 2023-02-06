@@ -29,7 +29,7 @@ include_directories(PkgConfig::FFTW)
 link_libraries     (PkgConfig::FFTW)
 
 # Compile executable
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp src/FFTStream.cpp)
 
 # Set include directory search paths
 target_include_directories(${PROJECT_NAME}

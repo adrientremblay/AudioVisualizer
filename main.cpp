@@ -4,12 +4,15 @@
 #include <cmath>
 #include <complex>
 #include <fftw3.h>
+#include <mutex>
 
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
 void processSignal(sf::SoundBuffer soundBuffer);
 
 constexpr unsigned int PERIOD = 20;
 constexpr unsigned int BINS = PERIOD / 2;
+
+std::mutex mtx;
 
 int main() {
     sf::SoundBuffer buffer;
