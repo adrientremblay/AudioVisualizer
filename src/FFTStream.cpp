@@ -38,7 +38,6 @@ float FFTStream::getDuration() {
 }
 
 bool FFTStream::onGetData(Chunk &data) {
-    /*
     data.samples = &m_samples[m_currentSample];
 
     if (m_currentSample + samplesToStream <= m_samples.size()) {
@@ -75,7 +74,8 @@ bool FFTStream::onGetData(Chunk &data) {
         m_currentSample = m_samples.size();
         return false;
     }
-     */
+
+    /*
     // number of samples to stream every time the function is called;
     // in a more robust implementation, it should be a fixed
     // amount of time rather than an arbitrary number of samples
@@ -96,6 +96,7 @@ bool FFTStream::onGetData(Chunk &data) {
         m_currentSample = m_samples.size();
         return false;
     }
+    */
 }
 
 void FFTStream::onSeek(sf::Time timeOffset) {
