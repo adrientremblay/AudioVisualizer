@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
+#include <cmath>
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
@@ -12,7 +13,11 @@ int main() {
         return -1;
     }
 
+    std::vector<std::string> devices = sf::SoundRecorder::getAvailableDevices();
+    std::string defaultDevice = sf::SoundRecorder::getDefaultDevice();
+
     sf::SoundBufferRecorder recorder;
+    recorder.setDevice(devices[1]);
     recorder.start();
 
     while (window.isOpen()) {
@@ -30,7 +35,24 @@ int main() {
 
     recorder.stop();
     const sf::SoundBuffer& buffer = recorder.getBuffer();
-    buffer.saveToFile("my_record.ogg");
+    //buffer.saveToFile("my_record.ogg");
+
+    const sf::Int16* samples = buffer.getSamples();
+    std::size_t count = buffer.getSampleCount();
+
+    sf::SoundBuffer Buffer;
+    if (!Buffer.loadFromSamples(samples, count, 1, buffer.getSampleRate())) {
+        std::cerr << "Loading failed!" << std::endl;
+        return 1;
+    }
+
+    sf::Sound Sound;
+    Sound.setBuffer(Buffer);
+    Sound.setLoop(true);
+    Sound.play();
+    while (1) {
+        sf::sleep(sf::milliseconds(100));
+    }
 
     return 0;
 }
