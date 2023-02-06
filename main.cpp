@@ -60,21 +60,38 @@ int main() {
     fftw_plan plan = fftw_plan_dft_r2c_1d(N, fftw_in, fftw_out, FFTW_ESTIMATE);
     fftw_execute(plan);
 
-    const int BIN_SIZE = 5000;
-    std::vector<double> bins;
-
     // Calculating magnitudes
     for (int i = 0 ; i < N / 2 ; i++) {
         double real = fftw_out[i][0];
         double imag = fftw_out[i][1];
         fftw_out[i][0] = sqrt(real * real + imag * imag);
         fftw_out[i][1] = 0;
-        std:: cout << fftw_out[i][0] << ' ';
+        //std:: cout << fftw_out[i][0] << ' ';
+    }
+
+    // Creating bins
+    const int BIN_SIZE = 1000;
+    std::vector<double> bins;
+    int bin_count = 0;
+    double bin_acc = 0;
+    for (int i = 0 ; i < N / 2 ; i++) {
+        bin_acc += fftw_out[i][0];
+        if (bin_count >= BIN_SIZE) {
+            bins.push_back(bin_acc);
+            bin_acc = 0;
+            bin_count=0;
+        } else {
+            bin_count++;
+        }
+    }
+
+    // Printing Bins
+    for (double bin : bins) {
+        std::cout << bin << std::endl;
     }
 
     fftw_destroy_plan(plan);
     fftw_free(fftw_out);
-
 
     return 0;
 }
