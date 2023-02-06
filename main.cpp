@@ -6,12 +6,12 @@
 #include <fftw3.h>
 
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
+void processSignal(sf::SoundBuffer soundBuffer);
+
+constexpr unsigned int PERIOD = 50;
+constexpr unsigned int BINS = PERIOD / 2;
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
     if (!sf::SoundBufferRecorder::isAvailable()) {
         std::cerr << "Yo the sound buffer recorder isn't available... fix it." << std::endl;
         return -1;
@@ -20,29 +20,27 @@ int main() {
     std::vector<std::string> devices = sf::SoundRecorder::getAvailableDevices();
     std::string defaultDevice = sf::SoundRecorder::getDefaultDevice();
 
-    sf::SoundBufferRecorder recorder;
-    recorder.setDevice(devices[1]);
-    recorder.start();
+    sf::SoundBufferRecorder* recorder = new sf::SoundBufferRecorder();
+    recorder->setDevice(devices[1]);
+    recorder->start();
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
+    while (1)  {
+        recorder->stop();
+        if (recorder->getBuffer().getSampleCount() >= PERIOD) {
+            processSignal(recorder->getBuffer());
+            delete recorder;
+            recorder = new sf::SoundBufferRecorder();
+            recorder->setDevice(devices[1]);
         }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
+        recorder->start();
     }
+    return 0;
+}
 
-    recorder.stop();
-
+void processSignal(sf::SoundBuffer soundBuffer) {
     // The samples are in time domain, they represent a sequence of amplitudes -> the position of the speaker cone
-    const sf::SoundBuffer& buffer = recorder.getBuffer();
-    const sf::Int16* samples = buffer.getSamples();
-    std::size_t N = buffer.getSampleCount();
+    const sf::Int16* samples = soundBuffer.getSamples();
+    std::size_t N = soundBuffer.getSampleCount();
     //buffer.saveToFile("my_record.ogg");
     std::cout << N << std::endl;
 
@@ -56,44 +54,23 @@ int main() {
 
     // todo: window function
 
-    // todo: this casting might be bad
     fftw_plan plan = fftw_plan_dft_r2c_1d(N, fftw_in, fftw_out, FFTW_ESTIMATE);
     fftw_execute(plan);
 
     // Calculating magnitudes
+    std::cout << "==============================" << std::endl;
     for (int i = 0 ; i < N / 2 ; i++) {
         double real = fftw_out[i][0];
         double imag = fftw_out[i][1];
         fftw_out[i][0] = sqrt(real * real + imag * imag);
         fftw_out[i][1] = 0;
-        //std:: cout << fftw_out[i][0] << ' ';
+        std:: cout << fftw_out[i][0] << std::endl;
     }
-
-    // Creating bins
-    const int BIN_SIZE = 1000;
-    std::vector<double> bins;
-    int bin_count = 0;
-    double bin_acc = 0;
-    for (int i = 0 ; i < N / 2 ; i++) {
-        bin_acc += fftw_out[i][0];
-        if (bin_count >= BIN_SIZE) {
-            bins.push_back(bin_acc);
-            bin_acc = 0;
-            bin_count=0;
-        } else {
-            bin_count++;
-        }
-    }
-
-    // Printing Bins
-    for (double bin : bins) {
-        std::cout << bin << std::endl;
-    }
+    std::cout << "==============================" << std::endl;
 
     fftw_destroy_plan(plan);
     fftw_free(fftw_out);
 
-    return 0;
 }
 
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x) {
