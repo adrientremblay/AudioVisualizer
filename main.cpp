@@ -10,7 +10,7 @@
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
 void processSignal(sf::SoundBuffer soundBuffer);
 
-constexpr unsigned int PERIOD = 20;
+constexpr unsigned int PERIOD = 1024;
 constexpr unsigned int BINS = PERIOD / 2;
 
 std::mutex mtx;
@@ -22,13 +22,7 @@ int main() {
         return -1;
     }
 
-    /*
-    sf::Sound sound;
-    sound.setBuffer(buffer);
-    sound.play();
-     */
-
-    float normalizedOutputFFT[512];
+    float normalizedOutputFFT[BINS];
 
     FFTStream fftStream;
     fftStream.load(buffer);
@@ -39,7 +33,7 @@ int main() {
 
     std::vector<sf::RectangleShape> bins;
 
-    bins.reserve(512);
+    bins.reserve(BINS);
     for (int i = 0 ; i < 512 ; i++) {
         sf::RectangleShape rect;
         rect.setSize(sf::Vector2f(1024 / 2, i));
@@ -48,17 +42,19 @@ int main() {
         bins.push_back(rect);
     }
 
-
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
             if (event.type == sf::Event::Closed)
                 window.close();
 
-
         window.clear();
 
-        for (sf::RectangleShape rect : bins) {
+        for (int i = 0 ; i < 512 ; i++) {
+            sf::RectangleShape rect = bins[i];
+            rect.setSize(sf::Vector2f (2, abs(normalizedOutputFFT[i])));
+            rect.setPosition(sf::Vector2f (i*2, 700 - abs(normalizedOutputFFT[i])));
+
             window.draw(rect);
         }
 
