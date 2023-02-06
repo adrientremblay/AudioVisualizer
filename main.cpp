@@ -35,25 +35,39 @@ int main() {
     fftStream.setCtx(normalizedOutputFFT);
     fftStream.play();
 
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Audio Visualizer");
-    sf::RectangleShape rect;
-    rect.setSize(sf::Vector2f(100, 50));
-    rect.setPosition(sf::Vector2f(10, 20));
-    rect.setFillColor(sf::Color::Green);
+    sf::RenderWindow window(sf::VideoMode(1024, 700), "Audio Visualizer");
 
-    while (window.isOpen())
-    {
+    std::vector<sf::RectangleShape> bins;
+
+    bins.reserve(512);
+    for (int i = 0 ; i < 512 ; i++) {
+        sf::RectangleShape rect;
+        rect.setSize(sf::Vector2f(1024 / 2, i));
+        rect.setPosition(sf::Vector2f(i * 2, 700 - i));
+        rect.setFillColor(sf::Color::Green);
+        bins.push_back(rect);
+    }
+
+
+    while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
             if (event.type == sf::Event::Closed)
                 window.close();
 
+
         window.clear();
-        window.draw(rect);
+
+        for (sf::RectangleShape rect : bins) {
+            window.draw(rect);
+        }
+
         window.display();
     }
     return 0;
 }
+
+/*
 
 void processSignal(sf::SoundBuffer soundBuffer) {
     // The samples are in time domain, they represent a sequence of amplitudes -> the position of the speaker cone
@@ -118,3 +132,4 @@ std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::comp
 
     return X;
 }
+ */
