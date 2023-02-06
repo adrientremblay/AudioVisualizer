@@ -2,8 +2,12 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <cmath>
+#include <complex>
 
 int main() {
+
+
+    /*
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -55,4 +59,34 @@ int main() {
     }
 
     return 0;
+    */
+}
+
+std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x) {
+    // Determine number of samples
+    int N = x.size();
+
+    // Allocate memory for X
+    std::vector<std::complex<double>> X;
+    X.reserve(N);
+
+    // Allocate memory for internals
+    std::complex<double> intSum;
+
+    // Looping
+    for (int k = 0 ; k < N ; k++) {
+        intSum = std::complex<double>(0, 0);
+
+        for (int n = 0 ; n < N ; n++) {
+            double inside = ((2*M_PI) / N) * k * n;
+            double realPart = cos(inside);
+            double imagPart = sin(inside);
+            std::complex<double> w(realPart, -imagPart);
+            intSum += x[n] * w;
+        }
+
+        X.push_back(intSum);
+    }
+
+    return X;
 }
