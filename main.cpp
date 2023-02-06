@@ -35,8 +35,22 @@ int main() {
     fftStream.setCtx(normalizedOutputFFT);
     fftStream.play();
 
-    while (true)  {
-        //processSignal(buffer);
+    sf::RenderWindow window(sf::VideoMode(500, 500), "Audio Visualizer");
+    sf::RectangleShape rect;
+    rect.setSize(sf::Vector2f(100, 50));
+    rect.setPosition(sf::Vector2f(10, 20));
+    rect.setFillColor(sf::Color::Green);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+        window.clear();
+        window.draw(rect);
+        window.display();
     }
     return 0;
 }
