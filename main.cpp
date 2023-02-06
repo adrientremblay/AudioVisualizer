@@ -4,7 +4,8 @@
 #include <cmath>
 #include <complex>
 #include <fftw3.h>
-#include <mutex>
+//#include <mutex>
+#include "../include/FFTStream.h"
 
 std::vector<std::complex<double>> discreteFourierTransform(std::vector<std::complex<double>> x);
 void processSignal(sf::SoundBuffer soundBuffer);
@@ -21,9 +22,15 @@ int main() {
         return -1;
     }
 
+    /*
     sf::Sound sound;
     sound.setBuffer(buffer);
     sound.play();
+     */
+
+    FFTStream fftStream;
+    fftStream.load(buffer);
+    fftStream.play();
 
     while (true)  {
         //processSignal(buffer);

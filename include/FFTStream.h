@@ -13,14 +13,7 @@
 #define REAL 0
 #define IMAG 1
 
-static float map(float n, float x1, float x2, float y1, float y2)
-{
-    float m = (y2 - y1) / (x2 - x1);
-    return y1 + m * (n - x1);
-}
-
-class FFTStream : public sf::SoundStream
-{
+class FFTStream : public sf::SoundStream {
 private:
     static const int samplesToStream = 2048;
     std::vector<sf::Int16> m_samples;
