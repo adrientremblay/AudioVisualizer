@@ -14,13 +14,16 @@
 #define IMAG 1
 
 class FFTStream : public sf::SoundStream {
+public:
+    static const int PERIOD = 2048;
+    static const int SIGNAL_LENGTH = PERIOD / 2;
+    static const int BINS = SIGNAL_LENGTH / 2;
 private:
-    static const int samplesToStream = 2048;
     std::vector<sf::Int16> m_samples;
     std::size_t m_currentSample;
-    fftw_complex signal[samplesToStream / 2];
-    fftw_complex output[samplesToStream / 2];
-    float last_output[512];
+    fftw_complex signal[PERIOD / 2];
+    fftw_complex output[PERIOD / 2];
+    float last_output[BINS];
     float *normalizedOutputFFT;
     fftw_plan plan;
     float duration = 0;

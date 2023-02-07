@@ -13,9 +13,6 @@ void processSignal(sf::SoundBuffer soundBuffer);
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
 
-constexpr unsigned int PERIOD = 1024;
-constexpr unsigned int BINS = PERIOD / 2;
-
 std::mutex mtx;
 
 int main() {
@@ -25,7 +22,7 @@ int main() {
         return -1;
     }
 
-    float normalizedOutputFFT[BINS];
+    float normalizedOutputFFT[FFTStream::BINS];
 
     FFTStream fftStream;
     fftStream.load(buffer);
@@ -35,11 +32,11 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
 
     std::vector<sf::RectangleShape> bins;
-    bins.reserve(BINS);
-    for (int i = 0 ; i < BINS ; i++) {
+    bins.reserve(FFTStream::BINS);
+    for (int i = 0 ; i < FFTStream::BINS ; i++) {
         sf::RectangleShape rect;
-        rect.setSize(sf::Vector2f(WINDOW_WIDTH / BINS, i));
-        rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / BINS), WINDOW_HEIGHT - i));
+        rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::BINS, i));
+        rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::BINS), WINDOW_HEIGHT - i));
         rect.setFillColor(sf::Color::Green);
         bins.push_back(rect);
     }
@@ -52,10 +49,10 @@ int main() {
 
         window.clear();
 
-        for (int i = 0 ; i < BINS ; i++) {
+        for (int i = 0 ; i < FFTStream::BINS ; i++) {
             sf::RectangleShape rect = bins[i];
-            rect.setSize(sf::Vector2f(WINDOW_WIDTH / BINS, abs(normalizedOutputFFT[i])));
-            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / BINS), WINDOW_HEIGHT - abs(normalizedOutputFFT[i])));
+            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::BINS, abs(normalizedOutputFFT[i])));
+            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::BINS), WINDOW_HEIGHT - abs(normalizedOutputFFT[i])));
 
             window.draw(rect);
         }
