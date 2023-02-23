@@ -17,26 +17,26 @@ std::mutex mtx;
 
 int main() {
     sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile("../audio/raver.wav")) {
+    if (!buffer.loadFromFile("../audio/A.wav")) {
         std::cerr << "Could not load RAVER.mp3!!!" << std::endl;
         return -1;
     }
 
-    float normalizedOutputFFT[FFTStream::SIGNAL_LENGTH];
+    float normalizedFrequencySpectrum[FFTStream::CONSIDERATION_LENGTH];
 
     FFTStream fftStream;
     fftStream.load(buffer);
-    fftStream.setCtx(normalizedOutputFFT);
+    fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
 
     std::vector<sf::RectangleShape> bins;
-    bins.reserve(FFTStream::SIGNAL_LENGTH);
-    for (int i = 0 ; i < FFTStream::SIGNAL_LENGTH ; i++) {
+    bins.reserve(FFTStream::CONSIDERATION_LENGTH);
+    for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
         sf::RectangleShape rect;
-        rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::SIGNAL_LENGTH, i));
-        rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::SIGNAL_LENGTH), WINDOW_HEIGHT - i));
+        rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, i));
+        rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), WINDOW_HEIGHT - i));
         rect.setFillColor(sf::Color::Green);
         bins.push_back(rect);
     }
@@ -49,10 +49,10 @@ int main() {
 
         window.clear();
 
-        for (int i = 0 ; i < FFTStream::SIGNAL_LENGTH ; i++) {
+        for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
             sf::RectangleShape rect = bins[i];
-            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::SIGNAL_LENGTH, abs(normalizedOutputFFT[i])));
-            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::SIGNAL_LENGTH), WINDOW_HEIGHT - abs(normalizedOutputFFT[i])));
+            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, abs(normalizedFrequencySpectrum[i])));
+            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), WINDOW_HEIGHT - abs(normalizedFrequencySpectrum[i])));
 
             window.draw(rect);
         }

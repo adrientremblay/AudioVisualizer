@@ -17,14 +17,19 @@ class FFTStream : public sf::SoundStream {
 public:
     // number of samples to stream every time the function is called;
     static const int PERIOD = 2048;
-    static const int SIGNAL_LENGTH = PERIOD / 2;
+
+    static const int FREQUENCY_SPECTRUM_LENGTH = PERIOD / 2;
+
+    // we only consider the first half of the frequency spectrum to avoid artifacts explained by the
+    // Shannon-Nyquist sampling theorem. See https://youtu.be/yYEMxqreA10?t=785
+    static const int CONSIDERATION_LENGTH = FREQUENCY_SPECTRUM_LENGTH / 2;
 private:
     std::vector<sf::Int16> m_samples;
     std::size_t m_currentSample;
-    fftw_complex signal[SIGNAL_LENGTH];
-    fftw_complex output[SIGNAL_LENGTH];
-    float last_output[SIGNAL_LENGTH];
-    float *normalizedOutputFFT;
+    fftw_complex input[FREQUENCY_SPECTRUM_LENGTH];
+    fftw_complex output[FREQUENCY_SPECTRUM_LENGTH];
+    float last_output[FREQUENCY_SPECTRUM_LENGTH];
+    float *normalizedFrequencySpectrum;
     fftw_plan plan;
     float duration = 0;
 
@@ -32,7 +37,6 @@ private:
     virtual void onSeek(sf::Time timeOffset);
 
     void fourierTransform();
-
 public:
     FFTStream();
     ~FFTStream();

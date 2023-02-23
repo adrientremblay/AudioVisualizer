@@ -3,11 +3,10 @@
 //
 
 #include "../include/FFTStream.h"
-#include "../include/Mutex.h"
 
 FFTStream::FFTStream() {
-    plan = fftw_plan_dft_1d(PERIOD / 2,
-                            signal,
+    plan = fftw_plan_dft_1d(FREQUENCY_SPECTRUM_LENGTH,
+                            input,
                             output,
                             FFTW_FORWARD,
                             FFTW_ESTIMATE);
@@ -18,9 +17,9 @@ FFTStream::~FFTStream() {
 }
 
 void FFTStream::setCtx(float *normalizedOutput) {
-    normalizedOutputFFT = normalizedOutput;
-    for (int i = 0; i < SIGNAL_LENGTH; i++) {
-        normalizedOutputFFT[i] = 0;
+    normalizedFrequencySpectrum = normalizedOutput;
+    for (int i = 0; i < CONSIDERATION_LENGTH; i++) {
+        normalizedFrequencySpectrum[i] = 0;
         last_output[i] = 0;
     }
 
@@ -45,7 +44,7 @@ bool FFTStream::onGetData(Chunk &data) {
         data.sampleCount = PERIOD;
         m_currentSample += PERIOD;
 
-        // calling the actual signal processing
+        // calling the actual input processing
         fourierTransform();
 
         return true;
@@ -66,13 +65,13 @@ void FFTStream::onSeek(sf::Time timeOffset) {
 void FFTStream::fourierTransform() {
     int j = 0;
     for (int i = m_currentSample; i < m_currentSample + PERIOD; i+=2) {
-        signal[j][REAL] = 0.5f * (float(m_samples[i]) / 32767.0f + float(m_samples[i + 1]) / 32767.0f);
-        signal[j][IMAG] = 0;
+        input[j][REAL] = 0.5f * (float(m_samples[i]) / 32767.0f + float(m_samples[i + 1]) / 32767.0f);
+        input[j][IMAG] = 0;
         j++;
     }
 
     double peak = 0;
-    for (int i = 0; i < SIGNAL_LENGTH; i++) {
+    for (int i = 0; i < CONSIDERATION_LENGTH; i++) {
         double amp = sqrt(output[i][REAL] * output[i][REAL] + output[i][IMAG] * output[i][IMAG]);
         peak = std::max(peak, amp);
     }
@@ -80,12 +79,12 @@ void FFTStream::fourierTransform() {
     fftw_execute(plan);
 
     std::lock_guard<std::mutex> lock(mtx);
-    for (int i = 0; i < SIGNAL_LENGTH; i++) {
+    for (int i = 0; i < CONSIDERATION_LENGTH; i++) {
         double amp = sqrt(output[i][REAL] * output[i][REAL] + output[i][IMAG] * output[i][IMAG]);
 
         float avg = (amp + last_output[i]) / 2;
 
-        normalizedOutputFFT[i] = 20 * log10(avg / peak);
+        normalizedFrequencySpectrum[i] = 20 * log10(avg / peak);
         last_output[i] = avg;
     }
 }
