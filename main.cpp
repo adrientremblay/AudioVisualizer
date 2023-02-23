@@ -8,6 +8,7 @@
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
 constexpr unsigned int BAR_HEIGHT_SCALING = 2;
+constexpr unsigned int BARS = 25;
 
 std::mutex mtx;
 
@@ -30,15 +31,18 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
 
-    std::vector<sf::RectangleShape> bins;
-    bins.reserve(FFTStream::CONSIDERATION_LENGTH);
-    for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
+    std::vector<sf::RectangleShape> bars;
+    bars.reserve(BARS);
+    for (int i = 0 ; i < BARS ; i++) {
         sf::RectangleShape rect;
-        rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, i));
-        rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), WINDOW_HEIGHT - i));
         rect.setFillColor(sf::Color::Green);
-        bins.push_back(rect);
+        bars.push_back(rect);
     }
+
+    std::vector<float> bar_heights;
+    bar_heights.reserve(BARS);
+
+    const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / BARS;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -48,15 +52,23 @@ int main() {
 
         window.clear();
 
+        for (int i = 0 ; i < BARS ; i++) {
+            bar_heights[i] = 0;
+        }
+
         for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
-            sf::RectangleShape rect = bins[i];
+            int bar_index = floor(i / frequencySpectrumToBinsScaleFactor);
 
-            // todo: determine if this is necessary
+            float frequency_mag = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
 
-            float bar_height = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
+            bar_heights[bar_index] += frequency_mag;
+        }
 
-            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, bar_height));
-            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), WINDOW_HEIGHT - bar_height));
+        for (int i = 0 ; i < BARS ; i++) {
+            sf::RectangleShape rect = bars[i];
+
+            rect.setSize(sf::Vector2f(WINDOW_WIDTH / BARS, bar_heights[i]));
+            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / BARS), WINDOW_HEIGHT - bar_heights[i]));
 
             window.draw(rect);
         }
