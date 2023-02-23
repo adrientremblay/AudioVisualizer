@@ -18,13 +18,12 @@ public:
     // number of samples to stream every time the function is called;
     static const int PERIOD = 2048;
     static const int SIGNAL_LENGTH = PERIOD / 2;
-    static const int BINS = SIGNAL_LENGTH / 2;
 private:
     std::vector<sf::Int16> m_samples;
     std::size_t m_currentSample;
-    fftw_complex signal[PERIOD / 2];
-    fftw_complex output[PERIOD / 2];
-    float last_output[BINS];
+    fftw_complex signal[SIGNAL_LENGTH];
+    fftw_complex output[SIGNAL_LENGTH];
+    float last_output[SIGNAL_LENGTH];
     float *normalizedOutputFFT;
     fftw_plan plan;
     float duration = 0;
