@@ -15,6 +15,7 @@
 
 class FFTStream : public sf::SoundStream {
 public:
+    // number of samples to stream every time the function is called;
     static const int PERIOD = 2048;
     static const int SIGNAL_LENGTH = PERIOD / 2;
     static const int BINS = SIGNAL_LENGTH / 2;
@@ -30,6 +31,8 @@ private:
 
     virtual bool onGetData(Chunk &data);
     virtual void onSeek(sf::Time timeOffset);
+
+    void fourierTransform();
 
 public:
     FFTStream();
