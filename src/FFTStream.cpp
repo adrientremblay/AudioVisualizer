@@ -45,7 +45,7 @@ bool FFTStream::onGetData(Chunk &data) {
         m_currentSample += PERIOD;
 
         // calling the actual input processing
-        fourierTransform();
+        calculateFrequencySpectrum();
 
         return true;
     } else {
@@ -62,7 +62,7 @@ void FFTStream::onSeek(sf::Time timeOffset) {
     m_currentSample = static_cast<std::size_t>(timeOffset.asSeconds() * getSampleRate() * getChannelCount());
 }
 
-void FFTStream::fourierTransform() {
+void FFTStream::calculateFrequencySpectrum() {
     int j = 0;
     for (int i = m_currentSample; i < m_currentSample + PERIOD; i+=2) {
         input[j][REAL] = 0.5f * (float(m_samples[i]) / 32767.0f + float(m_samples[i + 1]) / 32767.0f);
@@ -70,11 +70,13 @@ void FFTStream::fourierTransform() {
         j++;
     }
 
+    /*
     double peak = 0;
     for (int i = 0; i < CONSIDERATION_LENGTH; i++) {
         double amp = sqrt(output[i][REAL] * output[i][REAL] + output[i][IMAG] * output[i][IMAG]);
         peak = std::max(peak, amp);
     }
+     */
 
     fftw_execute(plan);
 
@@ -82,9 +84,11 @@ void FFTStream::fourierTransform() {
     for (int i = 0; i < CONSIDERATION_LENGTH; i++) {
         double amp = sqrt(output[i][REAL] * output[i][REAL] + output[i][IMAG] * output[i][IMAG]);
 
-        float avg = (amp + last_output[i]) / 2;
+        //float avg = (amp + last_output[i]) / 2;
 
-        normalizedFrequencySpectrum[i] = 20 * log10(avg / peak);
-        last_output[i] = avg;
+        //normalizedFrequencySpectrum[i] = 20 * log10(avg / peak);
+        //last_output[i] = avg;
+
+        normalizedFrequencySpectrum[i] = amp;
     }
 }

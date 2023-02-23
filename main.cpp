@@ -54,8 +54,13 @@ int main() {
 
         for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
             sf::RectangleShape rect = bins[i];
-            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, WINDOW_HEIGHT - (normalizedFrequencySpectrum[i])));
-            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), abs(normalizedFrequencySpectrum[i])));
+
+            // todo: determine if this is necessary
+
+            float bar_height = abs(normalizedFrequencySpectrum[i]);
+
+            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, bar_height));
+            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), WINDOW_HEIGHT - bar_height));
 
             window.draw(rect);
         }

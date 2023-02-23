@@ -36,7 +36,7 @@ private:
     virtual bool onGetData(Chunk &data);
     virtual void onSeek(sf::Time timeOffset);
 
-    void fourierTransform();
+    void calculateFrequencySpectrum();
 public:
     FFTStream();
     ~FFTStream();
