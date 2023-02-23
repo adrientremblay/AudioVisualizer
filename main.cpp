@@ -16,8 +16,11 @@ constexpr unsigned int WINDOW_HEIGHT = 700;
 std::mutex mtx;
 
 int main() {
+    std::cout << std::numeric_limits<float>::max() << std::endl;
+
+
     sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile("../audio/A.wav")) {
+    if (!buffer.loadFromFile("../audio/raver.wav")) {
         std::cerr << "Could not load RAVER.mp3!!!" << std::endl;
         return -1;
     }
@@ -51,8 +54,8 @@ int main() {
 
         for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
             sf::RectangleShape rect = bins[i];
-            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, abs(normalizedFrequencySpectrum[i])));
-            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), WINDOW_HEIGHT - abs(normalizedFrequencySpectrum[i])));
+            rect.setSize(sf::Vector2f(WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH, WINDOW_HEIGHT - (normalizedFrequencySpectrum[i])));
+            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / FFTStream::CONSIDERATION_LENGTH), abs(normalizedFrequencySpectrum[i])));
 
             window.draw(rect);
         }
