@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <GL/glew.h>
+#include <SFML/OpenGL.hpp>
 #include <iostream>
 #include <cmath>
 #include <mutex>
 #include "../include/FFTStream.h"
-#include <SFML/OpenGL.hpp>
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
@@ -12,6 +13,12 @@ constexpr unsigned int BAR_HEIGHT_SCALING = 2;
 constexpr unsigned int BARS = 25;
 
 std::mutex mtx;
+
+const float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
+};
 
 int main() {
     // Loading song
@@ -32,23 +39,28 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
     glEnable(GL_TEXTURE_2D);
 
-    // activate the window
+    // Activating the window
     window.setActive(true);
 
+    // Initialize GLEW
+    glewInit();
+
+    // Print GLEW version
+    std::cout << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
+
+    // OpenGL stuff
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+
     bool running = true;
-    while (running)
-    {
+    while (running) {
         // handle events
         sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
                 // end the program
                 running = false;
-            }
-            else if (event.type == sf::Event::Resized)
-            {
+            } else if (event.type == sf::Event::Resized) {
                 // adjust the viewport when the window is resized
                 glViewport(0, 0, event.size.width, event.size.height);
             }

@@ -39,6 +39,10 @@ target_include_directories(${PROJECT_NAME}
         "${PROJECT_BINARY_DIR}"
         )
 
+find_package(GLEW REQUIRED)
+include_directories(${GLEW_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
+
 # Link executable to required SFML libraries
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio GL dl)
 
