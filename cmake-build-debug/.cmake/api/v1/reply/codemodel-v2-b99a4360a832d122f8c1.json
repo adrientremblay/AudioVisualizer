@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-737b65b6d37cd188c95f.json",
+					"jsonFile" : "directory-.-Debug-a277da6d0a83300d7ef9.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.12"
@@ -40,7 +40,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "AudioVisualizer::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-AudioVisualizer-Debug-47a3cf6bb88a124001e6.json",
+					"jsonFile" : "target-AudioVisualizer-Debug-4f6a8e735ae5a51fa7bf.json",
 					"name" : "AudioVisualizer",
 					"projectIndex" : 0
 				}

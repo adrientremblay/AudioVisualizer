@@ -28,8 +28,10 @@ pkg_search_module(FFTW REQUIRED fftw3 IMPORTED_TARGET)
 include_directories(PkgConfig::FFTW)
 link_libraries     (PkgConfig::FFTW)
 
+find_package(OpenGL REQUIRED)
+
 # Compile executable
-add_executable(${PROJECT_NAME} main.cpp src/FFTStream.cpp)
+add_executable(${PROJECT_NAME} lib/glad.c main.cpp src/FFTStream.cpp)
 
 # Set include directory search paths
 target_include_directories(${PROJECT_NAME}
@@ -38,7 +40,7 @@ target_include_directories(${PROJECT_NAME}
         )
 
 # Link executable to required SFML libraries
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio )
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio GL dl)
 
 # Install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

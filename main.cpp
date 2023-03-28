@@ -4,6 +4,7 @@
 #include <cmath>
 #include <mutex>
 #include "../include/FFTStream.h"
+#include <SFML/OpenGL.hpp>
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
@@ -13,9 +14,6 @@ constexpr unsigned int BARS = 25;
 std::mutex mtx;
 
 int main() {
-    std::cout << std::numeric_limits<float>::max() << std::endl;
-
-
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("../audio/raver.wav")) {
         std::cerr << "Could not load RAVER.mp3!!!" << std::endl;
@@ -31,6 +29,9 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
 
+    glEnable(GL_TEXTURE_2D);
+
+    /*
     std::vector<sf::RectangleShape> bars;
     bars.reserve(BARS);
     for (int i = 0 ; i < BARS ; i++) {
@@ -75,5 +76,6 @@ int main() {
 
         window.display();
     }
+     */
     return 0;
 }
