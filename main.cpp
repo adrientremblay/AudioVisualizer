@@ -14,22 +14,54 @@ constexpr unsigned int BARS = 25;
 std::mutex mtx;
 
 int main() {
+    // Loading song
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("../audio/raver.wav")) {
         std::cerr << "Could not load RAVER.mp3!!!" << std::endl;
         return -1;
     }
 
+    // Creating & Starting frequency analysis stream
     float normalizedFrequencySpectrum[FFTStream::CONSIDERATION_LENGTH];
-
     FFTStream fftStream;
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
 
+    // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
-
     glEnable(GL_TEXTURE_2D);
+
+    // activate the window
+    window.setActive(true);
+
+    bool running = true;
+    while (running)
+    {
+        // handle events
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                // end the program
+                running = false;
+            }
+            else if (event.type == sf::Event::Resized)
+            {
+                // adjust the viewport when the window is resized
+                glViewport(0, 0, event.size.width, event.size.height);
+            }
+        }
+
+        // clear the buffers
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // draw...
+
+        // end the current frame (internally swaps the front and back buffers)
+        window.display();
+    }
 
     /*
     std::vector<sf::RectangleShape> bars;
