@@ -1,9 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <GL/glew.h>
-#include <SFML/OpenGL.hpp>
 #include <iostream>
-#include <cmath>
 #include <mutex>
 #include "../include/FFTStream.h"
 
@@ -43,6 +41,8 @@ int main() {
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
+
+    // Setting up bars
 
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
@@ -107,18 +107,26 @@ int main() {
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     bool running = true;
     while (running) {
+        // Update the vertex data
+        float new_vertices[] = {
+            -0.2f, -0.5f, 0.0f,
+            0.2f, -0.5f, 0.0f,
+            0.2f,  0.5f, 0.0f
+        };
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(new_vertices), new_vertices);
+
         // handle events
         sf::Event event;
         while (window.pollEvent(event)) {
