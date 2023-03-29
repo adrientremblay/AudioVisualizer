@@ -108,11 +108,10 @@ int main() {
     glEnableVertexAttribArray(0);
 
     int num_vertices = NUM_BARS * 6;
-    float *vertices = new float[num_vertices];
 
-    unsigned int indices[] = {
+    float vertices[] = {};
 
-    };
+    unsigned int indices[] = {};
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
@@ -153,14 +152,9 @@ int main() {
             bar.generate2DVertices(vertices);
         }
 
-        float new_vertices[vertices.size()];
-        for (int i = 0 ; i < vertices.size() ; i++) {
-            new_vertices[i] = vertices.at(i);
-        }
-
         //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(new_vertices), new_vertices);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(new_vertices), new_vertices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
 
         // handle events
         sf::Event event;
@@ -185,8 +179,6 @@ int main() {
         // end the current frame (internally swaps the front and back buffers)
         window.display();
     }
-
-    delete [] vertices;
 
     return 0;
 }
