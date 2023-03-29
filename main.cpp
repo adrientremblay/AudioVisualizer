@@ -108,6 +108,8 @@ int main() {
     glEnableVertexAttribArray(0);
 
     int num_vertices = NUM_BARS * 6;
+    int num_stored_vertices = NUM_BARS * 4;
+    int num_indices = NUM_BARS * 4;
 
     float vertices[] = {};
 
@@ -123,6 +125,8 @@ int main() {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -147,14 +151,17 @@ int main() {
         }
 
         std::vector<float> vertices;
+        std::vector<unsigned int> indices;
 
+        int vert_index = 0;
         for (Bar bar : bars) {
-            bar.generate2DVertices(vertices);
+            bar.generate2DVertices(vertices, indices, vert_index);
         }
 
-        //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(new_vertices), new_vertices);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices) * sizeof(unsigned int), indices.data(), GL_DYNAMIC_DRAW);
 
         // handle events
         sf::Event event;
@@ -175,6 +182,8 @@ int main() {
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        glDrawElements(GL_TRIANGLES, num_vertices, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();

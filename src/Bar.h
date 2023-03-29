@@ -15,7 +15,7 @@ public:
 
     Bar(float x, float width, float height);
 
-    void generate2DVertices(std::vector<float>& vertices);
+    void generate2DVertices(std::vector<float>& vertices, std::vector<unsigned int>& indices, int& vert_index);
 };
 
 
