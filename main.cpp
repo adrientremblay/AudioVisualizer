@@ -107,9 +107,8 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    float vertices[] = {
-
-    };
+    int num_vertices = NUM_BARS * 6;
+    float *vertices = new float[num_vertices];
 
     unsigned int indices[] = {
 
@@ -117,10 +116,8 @@ int main() {
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
-
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
-
     unsigned int EBO;
     glGenBuffers(1, &EBO);
 
@@ -189,51 +186,7 @@ int main() {
         window.display();
     }
 
-    /*
-    std::vector<sf::RectangleShape> bars;
-    bars.reserve(BARS);
-    for (int i = 0 ; i < BARS ; i++) {
-        sf::RectangleShape rect;
-        rect.setFillColor(sf::Color::Green);
-        bars.push_back(rect);
-    }
+    delete [] vertices;
 
-    std::vector<float> bar_heights;
-    bar_heights.reserve(BARS);
-
-    const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / BARS;
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event))
-            if (event.type == sf::Event::Closed)
-                window.close();
-
-        window.clear();
-
-        for (int i = 0 ; i < BARS ; i++) {
-            bar_heights[i] = 0;
-        }
-
-        for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
-            int bar_index = floor(i / frequencySpectrumToBinsScaleFactor);
-
-            float frequency_mag = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
-
-            bar_heights[bar_index] += frequency_mag;
-        }
-
-        for (int i = 0 ; i < BARS ; i++) {
-            sf::RectangleShape rect = bars[i];
-
-            rect.setSize(sf::Vector2f(WINDOW_WIDTH / BARS, bar_heights[i]));
-            rect.setPosition(sf::Vector2f(i * (WINDOW_WIDTH / BARS), WINDOW_HEIGHT - bar_heights[i]));
-
-            window.draw(rect);
-        }
-
-        window.display();
-    }
-     */
     return 0;
 }
