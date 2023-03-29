@@ -9,13 +9,13 @@
 
 class Bar {
 public:
-    static float bar_width;
+    float width;
     float height;
     float x;
 
-    Bar(float x, float height);
+    Bar(float x, float width, float height);
 
-    void generate2DVertices(std::vector<float> vertices);
+    void generate2DVertices(std::vector<float>& vertices);
 };
 
 

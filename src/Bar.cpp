@@ -4,11 +4,11 @@
 
 #include "Bar.h"
 
-Bar::Bar(float x, float height) : x(x), height(height) {
+Bar::Bar(float x, float width, float height) : x(x), width(width), height(height) {
 
 }
 
-void Bar::generate2DVertices(std::vector<float> vertices) {
+void Bar::generate2DVertices(std::vector<float>& vertices) {
     // First Triangle
     vertices.push_back(x);
     vertices.push_back(-1.0f);
@@ -18,7 +18,7 @@ void Bar::generate2DVertices(std::vector<float> vertices) {
     vertices.push_back(height);
     vertices.push_back(0);
 
-    vertices.push_back(x + bar_width);
+    vertices.push_back(x + width);
     vertices.push_back(-1.0f);
     vertices.push_back(0);
 
@@ -27,11 +27,11 @@ void Bar::generate2DVertices(std::vector<float> vertices) {
     vertices.push_back(height);
     vertices.push_back(0);
 
-    vertices.push_back(x + bar_width);
+    vertices.push_back(x + width);
     vertices.push_back(-1.0f);
     vertices.push_back(0);
 
-    vertices.push_back(x + bar_width);
-    vertices.push_back(height + bar_width);
+    vertices.push_back(x + width);
+    vertices.push_back(height + width);
     vertices.push_back(0);
 }

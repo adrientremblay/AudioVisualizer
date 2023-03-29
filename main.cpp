@@ -4,11 +4,12 @@
 #include <iostream>
 #include <mutex>
 #include "../include/FFTStream.h"
+#include "src/Bar.h"
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
-constexpr unsigned int BAR_HEIGHT_SCALING = 2;
-constexpr unsigned int BARS = 25;
+constexpr float BAR_HEIGHT_SCALING = 0.1;
+constexpr unsigned int NUM_BARS = 25;
 
 std::mutex mtx;
 
@@ -43,6 +44,14 @@ int main() {
     fftStream.play();
 
     // Setting up bars
+    float bar_width = (2.0f / NUM_BARS);
+
+    std::vector<Bar> bars;
+    bars.reserve(NUM_BARS);
+    for (int i = 0 ; i < NUM_BARS ; i++) {
+        float x = i * bar_width;
+        bars.push_back(Bar(x, bar_width, 0.0f));
+    }
 
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
@@ -117,14 +126,37 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
+
     bool running = true;
     while (running) {
         // Update the vertex data
-        float new_vertices[] = {
-            -0.2f, -0.5f, 0.0f,
-            0.2f, -0.5f, 0.0f,
-            0.2f,  0.5f, 0.0f
-        };
+
+        // Resetting bar height of all bars to 0
+        for (int i = 0 ; i < NUM_BARS ; i++) {
+            bars.at(i).height = 0;
+        }
+
+        // Calculating bar heights
+        for (float i = 0.0f ; i < FFTStream::CONSIDERATION_LENGTH - 13 ; i++) { // todo this is ass code
+            int bar_index = floor(i / frequencySpectrumToBinsScaleFactor);
+
+            float frequency_mag = abs(normalizedFrequencySpectrum[int(i)]) * BAR_HEIGHT_SCALING;
+
+            bars.at(bar_index).height += frequency_mag;
+        }
+
+        std::vector<float> vertices;
+
+        for (Bar bar : bars) {
+            bar.generate2DVertices(vertices);
+        }
+
+        float new_vertices[vertices.size()];
+        for (int i = 0 ; i < vertices.size() ; i++) {
+            vertices[i] = vertices.at(i);
+        }
+
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(new_vertices), new_vertices);
 
         // handle events
