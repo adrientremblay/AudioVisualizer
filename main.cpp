@@ -49,7 +49,7 @@ int main() {
     std::vector<Bar> bars;
     bars.reserve(NUM_BARS);
     for (int i = 0 ; i < NUM_BARS ; i++) {
-        float x = i * bar_width;
+        float x = i * bar_width - 1.0f;
         bars.push_back(Bar(x, bar_width, 0.0f));
     }
 
