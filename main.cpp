@@ -108,18 +108,22 @@ int main() {
     glEnableVertexAttribArray(0);
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
+
+    };
+
+    unsigned int indices[] = {
+
     };
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
+
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
