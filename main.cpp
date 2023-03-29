@@ -154,10 +154,12 @@ int main() {
 
         float new_vertices[vertices.size()];
         for (int i = 0 ; i < vertices.size() ; i++) {
-            vertices[i] = vertices.at(i);
+            new_vertices[i] = vertices.at(i);
         }
 
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(new_vertices), new_vertices);
+        //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(new_vertices), new_vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(new_vertices), new_vertices, GL_DYNAMIC_DRAW);
 
         // handle events
         sf::Event event;
@@ -177,7 +179,7 @@ int main() {
         // draw...
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();
