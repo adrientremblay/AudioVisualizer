@@ -15,7 +15,7 @@ void Bar::generate2DVertices(std::vector<float>& vertices) {
     vertices.push_back(0);
 
     vertices.push_back(x);
-    vertices.push_back(height);
+    vertices.push_back(height - 1.0f);
     vertices.push_back(0);
 
     vertices.push_back(x + width);
@@ -24,7 +24,7 @@ void Bar::generate2DVertices(std::vector<float>& vertices) {
 
     // Second Triangle
     vertices.push_back(x);
-    vertices.push_back(height);
+    vertices.push_back(height - 1.0f);
     vertices.push_back(0);
 
     vertices.push_back(x + width);
@@ -32,6 +32,6 @@ void Bar::generate2DVertices(std::vector<float>& vertices) {
     vertices.push_back(0);
 
     vertices.push_back(x + width);
-    vertices.push_back(height + width);
+    vertices.push_back(height - 1.0f);
     vertices.push_back(0);
 }

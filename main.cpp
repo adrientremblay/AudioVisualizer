@@ -8,7 +8,7 @@
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
-constexpr float BAR_HEIGHT_SCALING = 0.1;
+constexpr float BAR_HEIGHT_SCALING = 0.005;
 constexpr unsigned int NUM_BARS = 25;
 
 std::mutex mtx;
