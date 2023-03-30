@@ -143,6 +143,9 @@ int main() {
                                cameraTarget,
                                   cameraUp);
 
+    // Draw Wireframes
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
     bool running = true;
