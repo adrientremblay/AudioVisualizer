@@ -8,6 +8,9 @@
 #include <chrono>
 #include <ctime>
 #include <thread>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
@@ -20,9 +23,10 @@ std::mutex mtx;
 
 const char* vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
+                                 "uniform mat4 view;\n"
                                  "void main()\n"
                                  "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                 "   gl_Position = view * vec4(aPos, 1.0);\n"
                                  "}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
@@ -128,9 +132,19 @@ int main() {
 
     const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
 
+    // Camera stuff
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    glm::vec3 cameraRight = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), cameraDirection));
+    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+
+    glm::mat4 view = glm::lookAt(cameraPos,
+                               cameraTarget,
+                                  cameraUp);
+
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
-
     bool running = true;
     while (running) {
         // Update the vertex data
@@ -158,6 +172,11 @@ int main() {
             bar.generate2DVertices(vertices, indices, vert_index);
         }
 
+        glUseProgram(shaderProgram);
+        //glm::mat4 view = glm::mat4(1.0);
+//        view = glm::translate(view, glm::vec3(0.0f, 0.0f, 1.1f));
+        //view = glm::rotate(view, 20.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
@@ -182,7 +201,6 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw...
-        glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
