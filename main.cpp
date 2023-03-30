@@ -116,13 +116,6 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    int num_vertices = NUM_BARS * 12;
-    int num_indices = NUM_BARS * 6;
-
-    float vertices[] = {};
-
-    unsigned int indices[] = {};
-
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     unsigned int VAO;
@@ -205,7 +198,7 @@ int main() {
 
         // draw...
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         // end the current frame (internally swaps the front and back buffers)
