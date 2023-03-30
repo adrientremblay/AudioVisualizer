@@ -7,11 +7,14 @@
 #include "src/Bar.h"
 #include <chrono>
 #include <ctime>
+#include <thread>
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
 constexpr float BAR_HEIGHT_SCALING = 0.005;
-constexpr unsigned int NUM_BARS = 25;
+constexpr unsigned int NUM_BARS = 30;
+constexpr unsigned int FRAMES_PER_SECOND = 30;
+const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 
 std::mutex mtx;
 
@@ -125,6 +128,9 @@ int main() {
 
     const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
 
+    unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned long sleep_time = 0;
+
     bool running = true;
     while (running) {
         // Update the vertex data
@@ -183,6 +189,13 @@ int main() {
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();
+
+        // FPS stuff
+        next_game_tick += SKIP_TICKS;
+        sleep_time = next_game_tick - std::chrono::system_clock::now().time_since_epoch().count();
+        if (sleep_time >= 0) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
+        }
     }
 
     return 0;
