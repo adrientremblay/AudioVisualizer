@@ -127,7 +127,7 @@ int main() {
 
     // Camera stuff
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
-    glm::vec3 cameraTarget = glm::vec3(-0.0f, 0.0f, 0.0f);
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
     glm::vec3 cameraRight = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), cameraDirection));
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
@@ -135,6 +135,7 @@ int main() {
     glm::mat4 view = glm::lookAt(cameraPos,
                                cameraTarget,
                                   cameraUp);
+    view = glm::scale(view, glm::vec3(0.5, 1.0, 1.0));
 
     // Draw Wireframes
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
