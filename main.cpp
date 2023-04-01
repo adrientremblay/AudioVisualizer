@@ -21,6 +21,11 @@ const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 
 std::mutex mtx;
 
+enum Mode {
+    TWO_DIMENSIONAL,
+    TWO_DIMENSIONAL_SPINNING,
+} mode;
+
 const char* vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "uniform mat4 model;\n"
@@ -38,6 +43,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
                                    "{\n"
                                    "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
                                    "}\0";
+
 
 int main() {
     // Loading song
@@ -181,6 +187,10 @@ int main() {
             } else if (event.type == sf::Event::Resized) {
                 // adjust the viewport when the window is resized
                 glViewport(0, 0, event.size.width, event.size.height);
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+                mode = Mode::TWO_DIMENSIONAL;
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+                mode = Mode::TWO_DIMENSIONAL_SPINNING;
             }
         }
 
@@ -212,7 +222,9 @@ int main() {
             view = glm::scale(view, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
              */
             glm::mat4 model_matrix = glm::mat4(1.0f);
-            //model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            if (mode == Mode::TWO_DIMENSIONAL_SPINNING) {
+                model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            }
             model_matrix = glm::translate(model_matrix, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0, 0.0));
             model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
 
