@@ -53,7 +53,7 @@ int main() {
     fftStream.play();
 
     // Setting up bars
-    float bar_width = (2.0f / NUM_BARS);
+    float bar_width = (1.0f / NUM_BARS);
 
     std::vector<Bar> bars;
     bars.reserve(NUM_BARS);
@@ -124,6 +124,7 @@ int main() {
     glGenBuffers(1, &EBO);
 
     const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
+    const float barWidth = 1.0f / NUM_BARS;
 
     // Camera stuff
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -131,11 +132,6 @@ int main() {
     glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
     glm::vec3 cameraRight = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), cameraDirection));
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
-    glm::mat4 view = glm::lookAt(cameraPos,
-                               cameraTarget,
-                                  cameraUp);
-    //view = glm::scale(view, glm::vec3(0.5, 1.0, 1.0));
 
     // Draw Wireframes
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -165,6 +161,18 @@ int main() {
     unsigned long sleep_time = 0;
     bool running = true;
     while (running) {
+        // handle events
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                // end the program
+                running = false;
+            } else if (event.type == sf::Event::Resized) {
+                // adjust the viewport when the window is resized
+                glViewport(0, 0, event.size.width, event.size.height);
+            }
+        }
+
         // Resetting bar height of all bars to 0
         for (int i = 0 ; i < NUM_BARS ; i++) {
             bars.at(i).height = 0;
@@ -179,28 +187,23 @@ int main() {
             bars.at(bar_index).height += frequency_mag;
         }
 
-        glUseProgram(shaderProgram);
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
-
-        // handle events
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                // end the program
-                running = false;
-            } else if (event.type == sf::Event::Resized) {
-                // adjust the viewport when the window is resized
-                glViewport(0, 0, event.size.width, event.size.height);
-            }
-        }
-
-        // clear the buffers
+        // Drawing
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUseProgram(shaderProgram);
 
-        // draw...
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, sizeof(bar_indices), GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        for (int bar_index = 0 ; bar_index < bars.size() ; bar_index++) {
+            glm::mat4 view = glm::lookAt(cameraPos,
+                                         cameraTarget,
+                                         cameraUp);
+            view = glm::translate(view, glm::vec3(-1.0 + bar_width, 0.0, 0.0));
+            view = glm::scale(view, glm::vec3(bar_width, 1.0, 1.0));
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+            // draw...
+            glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, sizeof(bar_indices), GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();
