@@ -46,6 +46,10 @@ find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
 
+find_package(assimp REQUIRED)
+include_directories(${ASSIMP_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} assimp)
+
 # Link executable to required SFML libraries
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio GL dl)
 

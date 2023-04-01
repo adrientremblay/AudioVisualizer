@@ -24,7 +24,8 @@ std::mutex mtx;
 enum Mode {
     TWO_DIMENSIONAL,
     TWO_DIMENSIONAL_SPINNING,
-    THREE_DIMENSIONAL
+    THREE_DIMENSIONAL,
+    MODEL
 } mode;
 
 struct Bar {
@@ -181,7 +182,7 @@ int main() {
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
     // Draw Wireframes
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
