@@ -23,10 +23,12 @@ std::mutex mtx;
 
 const char* vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
+                                 "uniform mat4 model;\n"
                                  "uniform mat4 view;\n"
+                                 "uniform mat4 projection;\n"
                                  "void main()\n"
                                  "{\n"
-                                 "   gl_Position = view * vec4(aPos, 1.0);\n"
+                                 "   gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
                                  "}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
@@ -158,6 +160,14 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    // Model View Projection matrices
+    glm::mat4 view_matrix = glm::mat4(1.0f);
+// note that we're translating the scene in the reverse direction of where we want to move
+    view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
+
+    //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
+    glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
+
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
     bool running = true;
@@ -193,13 +203,22 @@ int main() {
         glUseProgram(shaderProgram);
 
         for (int bar_index = 0 ; bar_index < bars.size() ; bar_index++) {
+            /*
             glm::mat4 view = glm::lookAt(cameraPos,
                                          cameraTarget,
                                          cameraUp);
             // todo: can I simplify the position calculation?
             view = glm::translate(view, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0, 0.0));
             view = glm::scale(view, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+             */
+            glm::mat4 model_matrix = glm::mat4(1.0f);
+            //model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model_matrix = glm::translate(model_matrix, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0, 0.0));
+            model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
+
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view_matrix));
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
             // draw...
             glBindVertexArray(VAO);
