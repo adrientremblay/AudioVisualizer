@@ -24,6 +24,7 @@ std::mutex mtx;
 enum Mode {
     TWO_DIMENSIONAL,
     TWO_DIMENSIONAL_SPINNING,
+    THREE_DIMENSIONAL
 } mode;
 
 struct Bar {
@@ -41,15 +42,36 @@ const float bar_vertices[] = {
         -1.0f, -1.0f, 0.0f,  // bottom left
         -1.0f,  1.0f, 0.0f,   // top left
 
-        1.0f,  1.0f, -1.0f,  // top right
-        1.0f, -1.0f, -1.0f,  // bottom right
-        -1.0f, -1.0f, -1.0f,  // bottom left
-        -1.0f,  1.0f, -1.0f   // top left
+        1.0f,  1.0f, -0.2f,  // top right
+        1.0f, -1.0f, -0.2f,  // bottom right
+        -1.0f, -1.0f, -0.2f,  // bottom left
+        -1.0f,  1.0f, -0.2f   // top left
 };
 
 const unsigned int flat_bar_indices[] = {  // note that we start from 0!
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
+        0, 1, 2,
+        2, 3, 0,
+};
+
+const unsigned int volume_bar_indices[] = {  // note that we start from 0!
+        // Front face
+        0, 1, 2,
+        2, 3, 0,
+        // Back face
+        4, 5, 6,
+        6, 7, 4,
+        // Left face
+        3, 2, 6,
+        6, 7, 3,
+        // Right face
+        0, 1, 5,
+        5, 4, 0,
+        // Top face
+        4, 0, 3,
+        3, 7, 4,
+        // Bottom face
+        1, 5, 6,
+        6, 2, 1
 };
 
 const char* vertexShaderSource = "#version 330 core\n"
@@ -169,6 +191,9 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    // Default Mode is 2D
+    mode = Mode::TWO_DIMENSIONAL;
+
     // Model View Projection matrices
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -203,8 +228,16 @@ int main() {
                 glViewport(0, 0, event.size.width, event.size.height);
             } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
                 mode = Mode::TWO_DIMENSIONAL;
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
             } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
                 mode = Mode::TWO_DIMENSIONAL_SPINNING;
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+                mode = Mode::THREE_DIMENSIONAL;
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(volume_bar_indices), volume_bar_indices, GL_DYNAMIC_DRAW);
             }
         }
 
