@@ -135,29 +135,29 @@ int main() {
     glm::mat4 view = glm::lookAt(cameraPos,
                                cameraTarget,
                                   cameraUp);
-    view = glm::scale(view, glm::vec3(0.5, 1.0, 1.0));
+    //view = glm::scale(view, glm::vec3(0.5, 1.0, 1.0));
 
     // Draw Wireframes
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     int mode = 2;
 
-    float vertices[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
+    float bar_vertices[] = {
+            1.0f,  1.0f, 0.0f,  // top right
+            1.0f, -1.0f, 0.0f,  // bottom right
+            -1.0f, -1.0f, 0.0f,  // bottom left
+            -1.0f,  1.0f, 0.0f   // top left
     };
-    unsigned int indices[] = {  // note that we start from 0!
+    unsigned int bar_indices[] = {  // note that we start from 0!
             0, 1, 3,   // first triangle
             1, 2, 3    // second triangle
     };
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) , vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bar_vertices) , bar_vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bar_indices), bar_indices, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -199,7 +199,7 @@ int main() {
 
         // draw...
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, sizeof(bar_indices), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         // end the current frame (internally swaps the front and back buffers)
