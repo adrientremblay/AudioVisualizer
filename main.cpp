@@ -35,6 +35,23 @@ struct Bar {
     }
 };
 
+const float bar_vertices[] = {
+        1.0f,  1.0f, 0.0f,  // top right
+        1.0f, -1.0f, 0.0f,  // bottom right
+        -1.0f, -1.0f, 0.0f,  // bottom left
+        -1.0f,  1.0f, 0.0f,   // top left
+
+        1.0f,  1.0f, -1.0f,  // top right
+        1.0f, -1.0f, -1.0f,  // bottom right
+        -1.0f, -1.0f, -1.0f,  // bottom left
+        -1.0f,  1.0f, -1.0f   // top left
+};
+
+const unsigned int flat_bar_indices[] = {  // note that we start from 0!
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+};
+
 const char* vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "uniform mat4 model;\n"
@@ -69,14 +86,6 @@ int main() {
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
     fftStream.setVolume(0);
-
-    // Setting up bars
-    float bar_width = (1.0f / NUM_BARS);
-
-    std::vector<Bar> bars;
-    bars.reserve(NUM_BARS);
-    for (int i = 0 ; i < NUM_BARS ; i++)
-        bars.push_back(Bar(-1.0 + ((i + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0f));
 
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
@@ -152,24 +161,11 @@ int main() {
     // Draw Wireframes
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    int mode = 2;
-
-    float bar_vertices[] = {
-            1.0f,  1.0f, 0.0f,  // top right
-            1.0f, -1.0f, 0.0f,  // bottom right
-            -1.0f, -1.0f, 0.0f,  // bottom left
-            -1.0f,  1.0f, 0.0f   // top left
-    };
-    unsigned int bar_indices[] = {  // note that we start from 0!
-            0, 1, 3,   // first triangle
-            1, 2, 3    // second triangle
-    };
-
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(bar_vertices) , bar_vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bar_indices), bar_indices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -184,6 +180,13 @@ int main() {
     sf::Time time;
 
     glEnable(GL_DEPTH_TEST);
+
+    // Setting up bars
+    float bar_width = (1.0f / NUM_BARS);
+    std::vector<Bar> bars;
+    bars.reserve(NUM_BARS);
+    for (int i = 0 ; i < NUM_BARS ; i++)
+        bars.push_back(Bar(-1.0 + ((i + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0f));
 
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
@@ -244,7 +247,7 @@ int main() {
 
             // draw...
             glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, sizeof(bar_indices), GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
         }
 
