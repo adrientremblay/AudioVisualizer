@@ -4,7 +4,6 @@
 #include <iostream>
 #include <mutex>
 #include "../include/FFTStream.h"
-#include "src/Bar.h"
 #include <chrono>
 #include <ctime>
 #include <thread>
@@ -25,6 +24,15 @@ enum Mode {
     TWO_DIMENSIONAL,
     TWO_DIMENSIONAL_SPINNING,
 } mode;
+
+struct Bar {
+    float x;
+    float height;
+
+    Bar(float x, float height) : x(x), height(height) {
+
+    }
+};
 
 const char* vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -66,10 +74,8 @@ int main() {
 
     std::vector<Bar> bars;
     bars.reserve(NUM_BARS);
-    for (int i = 0 ; i < NUM_BARS ; i++) {
-        float x = i * bar_width - 1.0f;
-        bars.push_back(Bar(x, bar_width, 0.0f));
-    }
+    for (int i = 0 ; i < NUM_BARS ; i++)
+        bars.push_back(Bar(-1.0 + ((i + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0f));
 
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
@@ -168,7 +174,6 @@ int main() {
 
     // Model View Projection matrices
     glm::mat4 view_matrix = glm::mat4(1.0f);
-// note that we're translating the scene in the reverse direction of where we want to move
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
 
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
@@ -212,7 +217,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shaderProgram);
 
-        for (int bar_index = 0 ; bar_index < bars.size() ; bar_index++) {
+        for (Bar bar : bars) {
             /*
             glm::mat4 view = glm::lookAt(cameraPos,
                                          cameraTarget,
@@ -225,8 +230,8 @@ int main() {
             if (mode == Mode::TWO_DIMENSIONAL_SPINNING) {
                 model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             }
-            model_matrix = glm::translate(model_matrix, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0, 0.0));
-            model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
+            model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, 0.0, 0.0));
+            model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bar.height, 1.0));
 
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view_matrix));
