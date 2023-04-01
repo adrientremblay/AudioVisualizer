@@ -183,6 +183,8 @@ int main() {
     sf::Clock clock;
     sf::Time time;
 
+    glEnable(GL_DEPTH_TEST);
+
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
     bool running = true;
@@ -228,9 +230,6 @@ int main() {
             glm::mat4 view = glm::lookAt(cameraPos,
                                          cameraTarget,
                                          cameraUp);
-            // todo: can I simplify the position calculation?
-            view = glm::translate(view, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0, 0.0));
-            view = glm::scale(view, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
              */
             glm::mat4 model_matrix = glm::mat4(1.0f);
             if (mode == Mode::TWO_DIMENSIONAL_SPINNING) {
