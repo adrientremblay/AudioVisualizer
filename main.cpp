@@ -51,6 +51,7 @@ int main() {
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
+    fftStream.setVolume(0);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
@@ -195,8 +196,9 @@ int main() {
             glm::mat4 view = glm::lookAt(cameraPos,
                                          cameraTarget,
                                          cameraUp);
-            view = glm::translate(view, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2), 0.0, 0.0));
-            view = glm::scale(view, glm::vec3(bar_width, 1.0, 1.0));
+            // todo: can I simplify the position calculation?
+            view = glm::translate(view, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0, 0.0));
+            view = glm::scale(view, glm::vec3(bar_width, bars.at(bar_index).height, 1.0));
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
             // draw...
