@@ -195,7 +195,7 @@ int main() {
             glm::mat4 view = glm::lookAt(cameraPos,
                                          cameraTarget,
                                          cameraUp);
-            view = glm::translate(view, glm::vec3(-1.0 + bar_width, 0.0, 0.0));
+            view = glm::translate(view, glm::vec3(-1.0 + ((bar_index + 1) * bar_width * 2), 0.0, 0.0));
             view = glm::scale(view, glm::vec3(bar_width, 1.0, 1.0));
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
