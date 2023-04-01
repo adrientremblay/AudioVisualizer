@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
 #include <GL/glew.h>
 #include <iostream>
 #include <mutex>
@@ -179,6 +180,9 @@ int main() {
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
+    sf::Clock clock;
+    sf::Time time;
+
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
     bool running = true;
@@ -217,6 +221,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shaderProgram);
 
+        float angle_of_rotation = clock.getElapsedTime().asSeconds() * glm::radians(-50.0f);
+
         for (Bar bar : bars) {
             /*
             glm::mat4 view = glm::lookAt(cameraPos,
@@ -228,7 +234,7 @@ int main() {
              */
             glm::mat4 model_matrix = glm::mat4(1.0f);
             if (mode == Mode::TWO_DIMENSIONAL_SPINNING) {
-                model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+                model_matrix = glm::rotate(model_matrix, angle_of_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
             }
             model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, 0.0, 0.0));
             model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bar.height, 1.0));

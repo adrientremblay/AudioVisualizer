@@ -3,3 +3,5 @@ Todo
 - Improve code that does frequency domain transformation
 - Get the 2D OpenGL rendering working for the bars
 - Get the 3D OpenGL rendering working for the bars
+- Make it so the number of bars can be dynamically changed
+- Switch over FPS code to use the SFML time code
