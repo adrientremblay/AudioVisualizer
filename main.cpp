@@ -52,7 +52,7 @@ const float bar_vertices[] = {
 };
  */
 
-const float bar_vertices[] = {
+float bar_vertices[] = {
         // vertex position                     // normal vector
         1.0f,  1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // top right
         1.0f, -1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // bottom right
@@ -92,38 +92,36 @@ const unsigned int volume_bar_indices[] = {  // note that we start from 0!
 };
 
 int main() {
-    // Initialize normal vectors for all vertices
-    std::vector<glm::vec3> normals(sizeof(bar_vertices) / sizeof(unsigned int), glm::vec3(0.0f));
+    // Step 1: Initialize normal vectors
+    std::vector<glm::vec3> normals(8, glm::vec3(0.0f, 0.0f, 0.0f));
 
-    // Compute normal vectors for each face and add to vertex normals
-    for (int i = 0; i < sizeof(volume_bar_indices) / sizeof(unsigned int); i += 3) {
-        //todo: shit code
-        if (i >= sizeof(volume_bar_indices))
-            break;
+    // Step 2: Calculate face normals
+    for (int i = 0; i < 36; i += 3) {
+        unsigned int index1 = volume_bar_indices[i];
+        unsigned int index2 = volume_bar_indices[i + 1];
+        unsigned int index3 = volume_bar_indices[i + 2];
 
-        unsigned int i1 = volume_bar_indices[i];
-        unsigned int i2 = volume_bar_indices[i+1];
-        unsigned int i3 = volume_bar_indices[i+2];
-
-        glm::vec3 v1 = glm::vec3(bar_vertices[i1], bar_vertices[i1+1], bar_vertices[i1+2]);
-        glm::vec3 v2 = glm::vec3(bar_vertices[i2], bar_vertices[i2+1], bar_vertices[i2+2]);
-        glm::vec3 v3 = glm::vec3(bar_vertices[i3], bar_vertices[i3+1], bar_vertices[i3+2]);
+        glm::vec3 v1(bar_vertices[index1 * 6], bar_vertices[index1 * 6 + 1], bar_vertices[index1 * 6 + 2]);
+        glm::vec3 v2(bar_vertices[index2 * 6], bar_vertices[index2 * 6 + 1], bar_vertices[index2 * 6 + 2]);
+        glm::vec3 v3(bar_vertices[index3 * 6], bar_vertices[index3 * 6 + 1], bar_vertices[index3 * 6 + 2]);
 
         glm::vec3 edge1 = v2 - v1;
         glm::vec3 edge2 = v3 - v1;
-        glm::vec3 face_normal = glm::normalize(glm::cross(edge1, edge2));
+        glm::vec3 face_normal = glm::cross(edge1, edge2);
 
-        normals[i1] += face_normal;
-        normals[i2] += face_normal;
-        normals[i3] += face_normal;
+        normals[index1] += face_normal;
+        normals[index2] += face_normal;
+        normals[index3] += face_normal;
     }
 
-    // Normalize all vertex normal vectors
-    for (int i = 0; i < normals.size(); i++) {
+    // Step 3: Normalize normal vectors
+    for (int i = 0; i < 8; i++) {
         normals[i] = glm::normalize(normals[i]);
         std::cout << normals[i].x << ' ' << normals[i].y << ' ' << normals[i].z << std::endl;
+        bar_vertices[i*6 + 3 + 0] = normals[i].x;
+        bar_vertices[i*6 + 3 + 1] = normals[i].y;
+        bar_vertices[i*6 + 3 + 2] = normals[i].z;
     }
-
 
     // Loading song
     sf::SoundBuffer buffer;
@@ -208,7 +206,7 @@ int main() {
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
-    glm::vec3 lightPos(0.0f, 1.0f, 2.0f);
+    glm::vec3 lightPos(0.0f, 0.5f, 0.0f);
     glm::mat4 light_model_matrix = glm::mat4(1.0f);
     light_model_matrix = glm::translate(light_model_matrix, lightPos);
     light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.2f));
@@ -216,14 +214,17 @@ int main() {
     sf::Clock clock;
     sf::Time time;
 
+    // Enable Depth Testing
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
     std::vector<Bar> bars;
     bars.reserve(NUM_BARS);
     for (int i = 0 ; i < NUM_BARS ; i++)
-        bars.push_back(Bar(-1.0 + ((i + 1) * bar_width * 2 - (0.5 * bar_width)), 0.0f));
+        bars.push_back(Bar(-1.0 + ((i + 1) * (bar_width) * 2 - (0.5 * bar_width)), 0.0f));
 
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
