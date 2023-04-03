@@ -169,7 +169,7 @@ int main() {
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
     // Draw Wireframes
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // VAO stuff for bars
     glBindVertexArray(VAO);
@@ -209,7 +209,7 @@ int main() {
     glm::vec3 lightPos(0.0f, 0.5f, 0.0f);
     glm::mat4 light_model_matrix = glm::mat4(1.0f);
     light_model_matrix = glm::translate(light_model_matrix, lightPos);
-    light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.2f));
+    light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.1f));
 
     sf::Clock clock;
     sf::Time time;
@@ -305,6 +305,7 @@ int main() {
         }
 
         // Draw the light source
+        /*
         lightShader.use();
 
         lightShader.setMat4("model", light_model_matrix);
@@ -314,6 +315,7 @@ int main() {
         glBindVertexArray(lightVAO);
         glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+         */
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();
