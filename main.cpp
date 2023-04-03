@@ -208,7 +208,7 @@ int main() {
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
-    glm::vec3 lightPos(1.2f, 1.0f, -2.0f);
+    glm::vec3 lightPos(0.0f, 1.0f, 2.0f);
     glm::mat4 light_model_matrix = glm::mat4(1.0f);
     light_model_matrix = glm::translate(light_model_matrix, lightPos);
     light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.2f));
@@ -296,7 +296,10 @@ int main() {
 
             // draw the bar
             glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
+            if (Mode::THREE_DIMENSIONAL)
+                glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
+            else
+                glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
         }
 
@@ -308,7 +311,7 @@ int main() {
         lightShader.setMat4("projection", projection_matrix);
 
         glBindVertexArray(lightVAO);
-        glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         // end the current frame (internally swaps the front and back buffers)
