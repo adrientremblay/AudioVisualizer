@@ -73,15 +73,15 @@ const float bar_vertices[] = {
 
 float bar_vertices[] = {
         // vertex position                     // normal vector
-        1.0f,  1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // top right
-        1.0f, -1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // bottom right
-        -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, 1.0f,  // bottom left
-        -1.0f,  1.0f, 0.0f,     0.0f, 0.0f, 1.0f,  // top left
+        1.0f,  1.0f, 1.0f,      0.0f, 0.0f, 1.0f,  // top right
+        1.0f, -1.0f, 1.0f,      0.0f, 0.0f, 1.0f,  // bottom right
+        -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,  // bottom left
+        -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,  // top left
 
-        1.0f,  1.0f, -0.2f,     0.0f, 0.0f, -1.0f, // top right
-        1.0f, -1.0f, -0.2f,     0.0f, 0.0f, -1.0f, // bottom right
-        -1.0f, -1.0f, -0.2f,    0.0f, 0.0f, -1.0f, // bottom left
-        -1.0f,  1.0f, -0.2f,    0.0f, 0.0f, -1.0f  // top left
+        1.0f,  1.0f, -1.0f,     0.0f, 0.0f, -1.0f, // top right
+        1.0f, -1.0f, -1.0f,     0.0f, 0.0f, -1.0f, // bottom right
+        -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f, // bottom left
+        -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f  // top left
 };
 
 const unsigned int flat_bar_indices[] = {  // note that we start from 0!
@@ -425,7 +425,7 @@ int main() {
                 model_matrix = glm::rotate(model_matrix, angle_of_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
             }
             model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, bar.y, bar.z));
-            model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bar.height, 1.0));
+            model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bar.height, bar_width));
 
             barShader.setMat4("model", model_matrix);
             barShader.setMat4("view", view_matrix);
