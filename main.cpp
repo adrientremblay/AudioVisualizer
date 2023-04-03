@@ -147,9 +147,11 @@ int main() {
     window.setActive(true);
 
     // Setting up GUI
+    tgui::Theme::setDefault("../themes/TransparentGrey.txt");
     tgui::CheckBox::Ptr checkbox = tgui::CheckBox::create();
     gui.add(checkbox);
     tgui::Label::Ptr  checkbox_label = tgui::Label::create("balls");
+    checkbox_label->setPosition(20, 0);
     gui.add(checkbox_label);
 
     // Initialize GLEW
