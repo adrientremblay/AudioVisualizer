@@ -225,22 +225,37 @@ int main() {
 
     // Setting up GUI
     tgui::Theme::setDefault("../themes/TransparentGrey.txt");
-    tgui::CheckBox::Ptr checkbox = tgui::CheckBox::create();
-    checkbox->onCheck([&]() {
+
+    tgui::CheckBox::Ptr dimension_checkbox = tgui::CheckBox::create();
+    dimension_checkbox->onCheck([&]() {
         mode.is3d = true;
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(volume_bar_indices), volume_bar_indices, GL_DYNAMIC_DRAW);
     });
-    checkbox->onUncheck([&]() {
+    dimension_checkbox->onUncheck([&]() {
         mode.is3d = false;
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
     });
-    gui.add(checkbox);
+    gui.add(dimension_checkbox);
 
     tgui::Label::Ptr  checkbox_label = tgui::Label::create("3D Mode");
     checkbox_label->setPosition(20, 0);
     gui.add(checkbox_label);
+
+    tgui::CheckBox::Ptr spin_checkbox = tgui::CheckBox::create();
+    spin_checkbox->onCheck([&]() {
+        mode.isSpinning = true;
+    });
+    spin_checkbox->onUncheck([&]() {
+        mode.isSpinning = false;
+    });
+    spin_checkbox->setPosition(0, 20);
+    gui.add(spin_checkbox);
+
+    tgui::Label::Ptr spin_label = tgui::Label::create("Spin");
+    spin_label->setPosition(20, 20);
+    gui.add(spin_label);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
