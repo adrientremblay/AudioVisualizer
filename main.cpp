@@ -24,11 +24,13 @@ const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 
 std::mutex mtx;
 
-enum Mode {
-    TWO_DIMENSIONAL,
-    TWO_DIMENSIONAL_SPINNING,
-    THREE_DIMENSIONAL,
-    MODEL
+struct Mode {
+    bool is3d;
+    bool isSpinning;
+
+    Mode() : is3d(false), isSpinning(false) {
+
+    }
 } mode;
 
 struct Bar {
@@ -146,13 +148,6 @@ int main() {
     tgui::Gui gui{window};
     window.setActive(true);
 
-    // Setting up GUI
-    tgui::Theme::setDefault("../themes/TransparentGrey.txt");
-    tgui::CheckBox::Ptr checkbox = tgui::CheckBox::create();
-    gui.add(checkbox);
-    tgui::Label::Ptr  checkbox_label = tgui::Label::create("balls");
-    checkbox_label->setPosition(20, 0);
-    gui.add(checkbox_label);
 
     // Initialize GLEW
     glewInit();
@@ -204,9 +199,6 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Default Mode is 2D
-    mode = Mode::TWO_DIMENSIONAL;
-
     // Model View Projection matrices
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -229,6 +221,26 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glDepthMask(GL_TRUE);
+
+
+    // Setting up GUI
+    tgui::Theme::setDefault("../themes/TransparentGrey.txt");
+    tgui::CheckBox::Ptr checkbox = tgui::CheckBox::create();
+    checkbox->onCheck([&]() {
+        mode.is3d = true;
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(volume_bar_indices), volume_bar_indices, GL_DYNAMIC_DRAW);
+    });
+    checkbox->onUncheck([&]() {
+        mode.is3d = false;
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
+    });
+    gui.add(checkbox);
+
+    tgui::Label::Ptr  checkbox_label = tgui::Label::create("3D Mode");
+    checkbox_label->setPosition(20, 0);
+    gui.add(checkbox_label);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
@@ -253,18 +265,6 @@ int main() {
             } else if (event.type == sf::Event::Resized) {
                 // adjust the viewport when the window is resized
                 glViewport(0, 0, event.size.width, event.size.height);
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
-                mode = Mode::TWO_DIMENSIONAL;
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
-                mode = Mode::TWO_DIMENSIONAL_SPINNING;
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
-                mode = Mode::THREE_DIMENSIONAL;
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(volume_bar_indices), volume_bar_indices, GL_DYNAMIC_DRAW);
             }
         }
 
@@ -295,7 +295,7 @@ int main() {
                                          cameraUp);
              */
             glm::mat4 model_matrix = glm::mat4(1.0f);
-            if (mode == Mode::TWO_DIMENSIONAL_SPINNING) {
+            if (mode.isSpinning) {
                 model_matrix = glm::rotate(model_matrix, angle_of_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
             }
             model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, 0.0, 0.0));
@@ -311,7 +311,7 @@ int main() {
 
             // draw the bar
             glBindVertexArray(VAO);
-            if (Mode::THREE_DIMENSIONAL)
+            if (mode.is3d)
                 glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
             else
                 glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
