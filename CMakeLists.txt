@@ -60,8 +60,8 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio GL dl)
 #find_package(ImGui-SFML REQUIRED)
 #target_link_libraries(my_target PRIVATE ImGui-SFML::ImGui-SFML)
 
-find_package(ImGui-SFML REQUIRED)
-target_link_libraries(${PROJECT_NAME} ImGui-SFML::ImGui-SFML)
+#find_package(ImGui-SFML REQUIRED)
+#target_link_libraries(${PROJECT_NAME} ImGui-SFML::ImGui-SFML)
 
 # Install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
