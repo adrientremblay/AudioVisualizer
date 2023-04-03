@@ -63,6 +63,13 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio GL dl)
 #find_package(ImGui-SFML REQUIRED)
 #target_link_libraries(${PROJECT_NAME} ImGui-SFML::ImGui-SFML)
 
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_TTF_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${SDL2_TTF_LIBRARIES})
+
+find_package(TGUI REQUIRED)
+target_link_libraries(${PROJECT_NAME} tgui)
+
 # Install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 

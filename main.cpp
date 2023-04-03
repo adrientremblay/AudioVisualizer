@@ -12,6 +12,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "include/Shader.h"
+#include <TGUI/TGUI.hpp>
+#include <TGUI/Backend/SFML-OpenGL3.hpp>
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
@@ -141,6 +143,8 @@ int main() {
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
     glEnable(GL_TEXTURE_2D);
+    tgui::Gui gui{window};
+    gui.mainLoop();
     window.setActive(true);
 
     // Initialize GLEW
