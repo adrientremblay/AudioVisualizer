@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "include/Shader.h"
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
@@ -75,25 +76,6 @@ const unsigned int volume_bar_indices[] = {  // note that we start from 0!
         6, 2, 1
 };
 
-const char* vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
-                                 "uniform mat4 model;\n"
-                                 "uniform mat4 view;\n"
-                                 "uniform mat4 projection;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "   gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
-                                 "}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-                                   "out vec4 FragColor;\n"
-                                   "\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                   "}\0";
-
-
 int main() {
     // Loading song
     sf::SoundBuffer buffer;
@@ -113,56 +95,14 @@ int main() {
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
     glEnable(GL_TEXTURE_2D);
-
-    // Activating the window
     window.setActive(true);
 
     // Initialize GLEW
     glewInit();
 
-    // Print GLEW version
-    std::cout << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
-
-    // OpenGL stuff
-    int success;
-    char infoLog[512];
-
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if(!success) {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    glUseProgram(shaderProgram);
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    // Creating the Shader object
+    Shader barShader("../shaders/vertex_shader.vert", "../shaders/fragment_shader.frag");
+    Shader lightShader("../shaders/vertex_shader.vert", "../shaders/light_fragment_shader.frag");
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
@@ -172,7 +112,6 @@ int main() {
     glGenBuffers(1, &EBO);
 
     const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
-    const float barWidth = 1.0f / NUM_BARS;
 
     // Camera stuff
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -184,11 +123,22 @@ int main() {
     // Draw Wireframes
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // VAO stuff for bars
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(bar_vertices) , bar_vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // VAO stuff for light
+    unsigned int lightVAO;
+    glGenVertexArrays(1, &lightVAO);
+    glBindVertexArray(lightVAO);
+    // we only need to bind to the VBO, the container's VBO's data already contains the data.
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // set the vertex attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -198,9 +148,21 @@ int main() {
     // Model View Projection matrices
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
-
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
+
+    // We can immediately set the view and projection matrices, as they do not change
+    barShader.setMat4("view", view_matrix);
+    barShader.setMat4("projection", projection_matrix);
+
+    // setting the object and light colors
+    barShader.setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
+    barShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
+
+    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    glm::mat4 light_model_matrix = glm::mat4(1.0f);
+    light_model_matrix = glm::translate(light_model_matrix, lightPos);
+    light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.2f));
 
     sf::Clock clock;
     sf::Time time;
@@ -256,9 +218,9 @@ int main() {
             bars.at(bar_index).height += frequency_mag;
         }
 
-        // Drawing
+        // Drawing bars
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(shaderProgram);
+        barShader.use();
 
         float angle_of_rotation = clock.getElapsedTime().asSeconds() * glm::radians(-50.0f);
 
@@ -275,9 +237,7 @@ int main() {
             model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, 0.0, 0.0));
             model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bar.height, 1.0));
 
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view_matrix));
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection_matrix));
+            barShader.setMat4("model", model_matrix);
 
             // draw...
             glBindVertexArray(VAO);

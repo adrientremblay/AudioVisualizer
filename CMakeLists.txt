@@ -34,7 +34,7 @@ link_libraries     (PkgConfig::FFTW)
 find_package(OpenGL REQUIRED)
 
 # Compile executable
-add_executable(${PROJECT_NAME} lib/glad.c main.cpp src/FFTStream.cpp)
+add_executable(${PROJECT_NAME} lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp)
 
 # Set include directory search paths
 target_include_directories(${PROJECT_NAME}
@@ -52,6 +52,10 @@ target_link_libraries(${PROJECT_NAME} assimp)
 
 # Link executable to required SFML libraries
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio GL dl)
+
+#find_package(ImGui REQUIRED)
+#include_directories(${IMGUI_INCLUDE_DIRS})
+#target_link_libraries(${PROJECT_NAME} ImGui::ImGui)
 
 # Install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
