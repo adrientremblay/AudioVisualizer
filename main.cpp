@@ -18,7 +18,7 @@
 constexpr unsigned int WINDOW_WIDTH = 1024;
 constexpr unsigned int WINDOW_HEIGHT = 700;
 constexpr float BAR_HEIGHT_SCALING = 0.005;
-constexpr unsigned int NUM_BARS = 30;
+constexpr unsigned int DEFAULT_NUM_BARS = 30;
 constexpr unsigned int FRAMES_PER_SECOND = 30;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 constexpr float DEFAULT_SPIN_ANGLE = -50.0f;
@@ -35,7 +35,9 @@ struct Mode {
     bool cameraFly;
     float flyAngle;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE) {
+    unsigned int numBars;
+
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS) {
 
     }
 } mode;
@@ -101,6 +103,15 @@ const unsigned int volume_bar_indices[] = {  // note that we start from 0!
         1, 5, 6,
         6, 2, 1
 };
+
+void genBars(std::vector<Bar>& bars) {
+    const float bar_width = (1.0f / mode.numBars);
+
+    bars.clear();
+    bars.reserve(mode.numBars);
+    for (int i = 0 ; i < mode.numBars ; i++)
+        bars.push_back(Bar(-1.0 + ((i + 1) * (bar_width) * 2 - (0.5 * bar_width)), 0.0f));
+}
 
 int main() {
     // Step 1: Initialize normal vectors
@@ -172,8 +183,6 @@ int main() {
     unsigned int lightVAO;
     glGenVertexArrays(1, &lightVAO);
 
-    const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
-
     // Camera stuff
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
     glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -224,6 +233,9 @@ int main() {
     glDepthFunc(GL_LESS);
     glDepthMask(GL_TRUE);
 
+    // Setting up bars
+    std::vector<Bar> bars;
+    genBars(bars);
 
     // Setting up GUI
     tgui::Theme::setDefault("../themes/TransparentGrey.txt");
@@ -304,12 +316,21 @@ int main() {
     fly_angle_label->setPosition(150, 40);
     gui.add(fly_angle_label);
 
-    // Setting up bars
-    float bar_width = (1.0f / NUM_BARS);
-    std::vector<Bar> bars;
-    bars.reserve(NUM_BARS);
-    for (int i = 0 ; i < NUM_BARS ; i++)
-        bars.push_back(Bar(-1.0 + ((i + 1) * (bar_width) * 2 - (0.5 * bar_width)), 0.0f));
+    tgui::EditBox::Ptr num_bars_edit_box = tgui::EditBox::create();
+    num_bars_edit_box->setSize(40, 20);
+    num_bars_edit_box->setPosition(100, 60);
+    num_bars_edit_box->onReturnKeyPress([&] {
+        unsigned int num_bars_value = num_bars_edit_box->getText().toUInt();
+        if (num_bars_value > 50 || num_bars_value == 0)
+            return;
+        mode.numBars = num_bars_value;
+        genBars(bars);
+    });
+    gui.add(num_bars_edit_box);
+
+    tgui::Label::Ptr num_bars_label = tgui::Label::create("Num Bars");
+    num_bars_label->setPosition(150, 60);
+    gui.add(num_bars_label);
 
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
@@ -331,11 +352,12 @@ int main() {
         }
 
         // Resetting bar height of all bars to 0
-        for (int i = 0 ; i < NUM_BARS ; i++) {
+        for (int i = 0 ; i < mode.numBars ; i++) {
             bars.at(i).height = 0;
         }
 
         // Calculating bar heights
+        const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / mode.numBars;
         for (float i = 0.0f ; i < FFTStream::CONSIDERATION_LENGTH - 13 ; i++) { // todo this is ass code
             int bar_index = floor(i / frequencySpectrumToBinsScaleFactor);
 
@@ -358,6 +380,8 @@ int main() {
             view_matrix = glm::rotate(view_matrix, fly_angle_of_rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
         }
         //view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate the camera around the z-axis to position it up
+
+        const float bar_width = (1.0f / mode.numBars);
 
         for (Bar bar : bars) {
             /*
