@@ -166,7 +166,6 @@ int main() {
     tgui::Gui gui{window};
     window.setActive(true);
 
-
     // Initialize GLEW
     glewInit();
 
@@ -321,7 +320,7 @@ int main() {
     num_bars_edit_box->setPosition(100, 60);
     num_bars_edit_box->onReturnKeyPress([&] {
         unsigned int num_bars_value = num_bars_edit_box->getText().toUInt();
-        if (num_bars_value > 50 || num_bars_value == 0)
+        if (num_bars_value > FFTStream::CONSIDERATION_LENGTH || num_bars_value == 0)
             return;
         mode.numBars = num_bars_value;
         genBars(bars);
@@ -357,11 +356,11 @@ int main() {
         }
 
         // Calculating bar heights
-        const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / mode.numBars;
-        for (float i = 0.0f ; i < FFTStream::CONSIDERATION_LENGTH - 13 ; i++) { // todo this is ass code
+        const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / (float)mode.numBars;
+        for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
             int bar_index = floor(i / frequencySpectrumToBinsScaleFactor);
 
-            float frequency_mag = abs(normalizedFrequencySpectrum[int(i)]) * BAR_HEIGHT_SCALING;
+            float frequency_mag = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
 
             bars.at(bar_index).height += frequency_mag;
         }
