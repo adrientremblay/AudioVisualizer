@@ -200,11 +200,6 @@ int main() {
     glEnableVertexAttribArray(0);
 
     // Model View Projection matrices
-    glm::mat4 view_matrix = glm::mat4(1.0f);
-    view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
-    view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f)); // rotate the camera around the x-axis to look down at the origin
-    //view_matrix = glm::rotate(view_matrix, 22.0f, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
-    //view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate the camera around the z-axis to position it up
 
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
@@ -302,6 +297,14 @@ int main() {
         barShader.use();
 
         float angle_of_rotation = clock.getElapsedTime().asSeconds() * glm::radians(-50.0f);
+
+        glm::mat4 view_matrix = glm::mat4(1.0f);
+        view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
+        view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f)); // rotate the camera around the x-axis to look down at the origin
+        if (true) {
+            view_matrix = glm::rotate(view_matrix, angle_of_rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
+        }
+        //view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate the camera around the z-axis to position it up
 
         for (Bar bar : bars) {
             /*
