@@ -41,7 +41,7 @@ struct Mode {
     bool circleLayout;
     float circleRadius;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(true), circleRadius(DEFAULT_CIRCLE_RADIUS) {
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(false), circleRadius(DEFAULT_CIRCLE_RADIUS) {
 
     }
 } mode;
@@ -350,6 +350,18 @@ int main() {
     tgui::Label::Ptr num_bars_label = tgui::Label::create("Num Bars");
     num_bars_label->setPosition(150, 60);
     gui.add(num_bars_label);
+
+    tgui::CheckBox::Ptr circle_layout_checkbox = tgui::CheckBox::create();
+    circle_layout_checkbox->onCheck([&]() {
+        mode.circleLayout = true;
+        genBars(bars);
+    });
+    circle_layout_checkbox->onUncheck([&]() {
+        mode.circleLayout = false;
+        genBars(bars);
+    });
+    circle_layout_checkbox->setPosition(0, 80);
+    gui.add(circle_layout_checkbox);
 
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
