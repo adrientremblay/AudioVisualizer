@@ -21,14 +21,16 @@ constexpr float BAR_HEIGHT_SCALING = 0.005;
 constexpr unsigned int NUM_BARS = 30;
 constexpr unsigned int FRAMES_PER_SECOND = 30;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+constexpr float DEFAULT_SPIN_ANGLE = -50.0f;
 
 std::mutex mtx;
 
 struct Mode {
     bool is3d;
     bool isSpinning;
+    float spinAngle;
 
-    Mode() : is3d(false), isSpinning(false) {
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE) {
 
     }
 } mode;
@@ -252,6 +254,17 @@ int main() {
     spin_label->setPosition(20, 20);
     gui.add(spin_label);
 
+    tgui::EditBox::Ptr spin_angle_edit_box = tgui::EditBox::create();
+    spin_angle_edit_box->setPosition(40, 20);
+    spin_angle_edit_box->onReturnKeyPress([&] {
+        float spin_angle_edit_box_value = spin_angle_edit_box->getText().toFloat();
+        if (spin_angle_edit_box_value < -360.0f || spin_angle_edit_box_value > 360.0f)
+            return;
+        mode.spinAngle = spin_angle_edit_box_value;
+        std::cout << mode.spinAngle << std::endl;
+    });
+    gui.add(spin_angle_edit_box);
+
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
     std::vector<Bar> bars;
@@ -296,12 +309,12 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         barShader.use();
 
-        float angle_of_rotation = clock.getElapsedTime().asSeconds() * glm::radians(-50.0f);
+        float angle_of_rotation = clock.getElapsedTime().asSeconds() * glm::radians(mode.spinAngle);
 
         glm::mat4 view_matrix = glm::mat4(1.0f);
         view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
         view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f)); // rotate the camera around the x-axis to look down at the origin
-        if (true) {
+        if (false) {
             view_matrix = glm::rotate(view_matrix, angle_of_rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
         }
         //view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate the camera around the z-axis to position it up
