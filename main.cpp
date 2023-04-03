@@ -101,7 +101,7 @@ int main() {
     glewInit();
 
     // Creating the Shader object
-    Shader barShader("../shaders/vertex_shader.vert", "../shaders/light_fragment_shader.frag");
+    Shader barShader("../shaders/vertex_shader.vert", "../shaders/fragment_shader.frag");
     Shader lightShader("../shaders/vertex_shader.vert", "../shaders/light_fragment_shader.frag");
 
     unsigned int VBO;
@@ -110,6 +110,8 @@ int main() {
     glGenVertexArrays(1, &VAO);
     unsigned int EBO;
     glGenBuffers(1, &EBO);
+    unsigned int lightVAO;
+    glGenVertexArrays(1, &lightVAO);
 
     const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / NUM_BARS;
 
@@ -121,7 +123,7 @@ int main() {
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
     // Draw Wireframes
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // VAO stuff for bars
     glBindVertexArray(VAO);
@@ -133,16 +135,13 @@ int main() {
     glEnableVertexAttribArray(0);
 
     // VAO stuff for light
-    /*
-    unsigned int lightVAO;
-    glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
     // we only need to bind to the VBO, the container's VBO's data already contains the data.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // set the vertex attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-     */
 
     // Default Mode is 2D
     mode = Mode::TWO_DIMENSIONAL;
@@ -153,16 +152,10 @@ int main() {
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
-    // setting the object and light colors
-    barShader.setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
-    barShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
-
-    /*
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    glm::vec3 lightPos(1.2f, 1.0f, -2.0f);
     glm::mat4 light_model_matrix = glm::mat4(1.0f);
     light_model_matrix = glm::translate(light_model_matrix, lightPos);
     light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.2f));
-     */
 
     sf::Clock clock;
     sf::Time time;
@@ -241,11 +234,25 @@ int main() {
             barShader.setMat4("view", view_matrix);
             barShader.setMat4("projection", projection_matrix);
 
-            // draw...
+            barShader.setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
+            barShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
+
+            // draw the bar
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
         }
+
+        // Draw the light source
+        lightShader.use();
+
+        lightShader.setMat4("model", light_model_matrix);
+        lightShader.setMat4("view", view_matrix);
+        lightShader.setMat4("projection", projection_matrix);
+
+        glBindVertexArray(lightVAO);
+        glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();
