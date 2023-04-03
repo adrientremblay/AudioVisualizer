@@ -144,8 +144,13 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
     glEnable(GL_TEXTURE_2D);
     tgui::Gui gui{window};
-    gui.mainLoop();
     window.setActive(true);
+
+    // Setting up GUI
+    tgui::CheckBox::Ptr checkbox = tgui::CheckBox::create();
+    gui.add(checkbox);
+    tgui::Label::Ptr  checkbox_label = tgui::Label::create("balls");
+    gui.add(checkbox_label);
 
     // Initialize GLEW
     glewInit();
@@ -173,7 +178,7 @@ int main() {
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
     // Draw Wireframes
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // VAO stuff for bars
     glBindVertexArray(VAO);
@@ -238,6 +243,8 @@ int main() {
         // handle events
         sf::Event event;
         while (window.pollEvent(event)) {
+            gui.handleEvent(event);
+
             if (event.type == sf::Event::Closed) {
                 // end the program
                 running = false;
@@ -321,6 +328,9 @@ int main() {
         glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
          */
+
+        // drawing gui
+        gui.draw();
 
         // end the current frame (internally swaps the front and back buffers)
         window.display();
