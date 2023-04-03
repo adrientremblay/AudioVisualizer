@@ -73,15 +73,15 @@ const float bar_vertices[] = {
 
 float bar_vertices[] = {
         // vertex position                     // normal vector
-        1.0f,  1.0f, 1.0f,      0.0f, 0.0f, 1.0f,  // top right
-        1.0f, -1.0f, 1.0f,      0.0f, 0.0f, 1.0f,  // bottom right
-        -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,  // bottom left
-        -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,  // top left
+        1.0f,  1.0f, 1.0f,      0.0f, 0.0f, 0.0f,  // top right
+        1.0f, -1.0f, 1.0f,      0.0f, 0.0f, 0.0f,  // bottom right
+        -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 0.0f,  // bottom left
+        -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 0.0f,  // top left
 
-        1.0f,  1.0f, -1.0f,     0.0f, 0.0f, -1.0f, // top right
-        1.0f, -1.0f, -1.0f,     0.0f, 0.0f, -1.0f, // bottom right
-        -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f, // bottom left
-        -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f  // top left
+        1.0f,  1.0f, -1.0f,     0.0f, 0.0f, 0.0f, // top right
+        1.0f, -1.0f, -1.0f,     0.0f, 0.0f, 0.0f, // bottom right
+        -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, 0.0f, // bottom left
+        -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, 0.0f  // top left
 };
 
 const unsigned int flat_bar_indices[] = {  // note that we start from 0!
@@ -121,7 +121,6 @@ void genBars(std::vector<Bar>& bars) {
         for (int i = 0; i < mode.numBars; i++) {
             float x = mode.circleRadius * cos(i * angle);
             float z = mode.circleRadius * sin(i * angle);
-            std::cout << "x: " << x << " z: " << z << std::endl;
             bars.push_back(Bar(x, 0, z, 0.0f));
         }
 
@@ -151,9 +150,9 @@ int main() {
         glm::vec3 edge2 = v3 - v1;
         glm::vec3 face_normal = glm::cross(edge1, edge2);
 
-        normals[index1] += face_normal;
-        normals[index2] += face_normal;
-        normals[index3] += face_normal;
+        normals[index1] = face_normal;
+        normals[index2] = face_normal;
+        normals[index3] = face_normal;
     }
 
     // Step 3: Normalize normal vectors
@@ -449,7 +448,6 @@ int main() {
         }
 
         // Draw the light source
-        /*
         lightShader.use();
 
         lightShader.setMat4("model", light_model_matrix);
@@ -459,7 +457,6 @@ int main() {
         glBindVertexArray(lightVAO);
         glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-         */
 
         // drawing gui
         gui.draw();
