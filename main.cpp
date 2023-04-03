@@ -11,6 +11,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
+#include <imgui-SFML.h>
 #include "include/Shader.h"
 
 constexpr unsigned int WINDOW_WIDTH = 1024;
@@ -226,6 +228,9 @@ int main() {
     for (int i = 0 ; i < NUM_BARS ; i++)
         bars.push_back(Bar(-1.0 + ((i + 1) * (bar_width) * 2 - (0.5 * bar_width)), 0.0f));
 
+    ImGui::SFML::Init(window);
+
+    sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
     bool running = true;
@@ -233,6 +238,8 @@ int main() {
         // handle events
         sf::Event event;
         while (window.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(window, event);
+
             if (event.type == sf::Event::Closed) {
                 // end the program
                 running = false;
@@ -253,6 +260,15 @@ int main() {
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(volume_bar_indices), volume_bar_indices, GL_DYNAMIC_DRAW);
             }
         }
+
+        // Imgui stuff
+        ImGui::SFML::Update(window, deltaClock.restart());
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::Begin("Hello, world!");
+        ImGui::Button("Look at this pretty button");
+        ImGui::End();
 
         // Resetting bar height of all bars to 0
         for (int i = 0 ; i < NUM_BARS ; i++) {
@@ -317,16 +333,21 @@ int main() {
         glBindVertexArray(0);
          */
 
+        ImGui::SFML::Render(window);
+
         // end the current frame (internally swaps the front and back buffers)
         window.display();
 
         // FPS stuff
+        // todo: window.setFramerateLimit(60) ???? why not
         next_game_tick += SKIP_TICKS;
         sleep_time = next_game_tick - std::chrono::system_clock::now().time_since_epoch().count();
         if (sleep_time >= 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
         }
     }
+
+    ImGui::SFML::Shutdown();
 
     // todo cleanup stuff?
     /*

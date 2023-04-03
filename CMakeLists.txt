@@ -34,7 +34,7 @@ link_libraries     (PkgConfig::FFTW)
 find_package(OpenGL REQUIRED)
 
 # Compile executable
-add_executable(${PROJECT_NAME} lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp)
+add_executable(${PROJECT_NAME} lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp lib/imgui/imgui.cpp lib/imgui/imgui_demo.cpp lib/imgui/imgui_draw.cpp lib/imgui/imgui_tables.cpp lib/imgui/imgui_widgets.cpp)
 
 # Set include directory search paths
 target_include_directories(${PROJECT_NAME}
