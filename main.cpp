@@ -27,10 +27,13 @@ std::mutex mtx;
 
 struct Mode {
     bool is3d;
+
     bool isSpinning;
     float spinAngle;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE) {
+    bool cameraFly;
+
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false) {
 
     }
 } mode;
@@ -241,6 +244,7 @@ int main() {
     gui.add(checkbox_label);
 
     tgui::CheckBox::Ptr spin_checkbox = tgui::CheckBox::create();
+
     spin_checkbox->onCheck([&]() {
         mode.isSpinning = true;
     });
@@ -265,10 +269,23 @@ int main() {
     });
     gui.add(spin_angle_edit_box);
 
-
     tgui::Label::Ptr spin_angle_label = tgui::Label::create("Angle");
     spin_angle_label->setPosition(220, 20);
     gui.add(spin_angle_label);
+
+    tgui::CheckBox::Ptr camera_fly_checkbox = tgui::CheckBox::create();
+    camera_fly_checkbox->onCheck([&]() {
+        mode.cameraFly = true;
+    });
+    camera_fly_checkbox->onUncheck([&]() {
+        mode.cameraFly = false;
+    });
+    camera_fly_checkbox->setPosition(0, 40);
+    gui.add(camera_fly_checkbox);
+
+    tgui::Label::Ptr camera_fly_label = tgui::Label::create("Camera Fly");
+    camera_fly_label->setPosition(20, 40);
+    gui.add(camera_fly_label);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
@@ -319,7 +336,7 @@ int main() {
         glm::mat4 view_matrix = glm::mat4(1.0f);
         view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
         view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f)); // rotate the camera around the x-axis to look down at the origin
-        if (false) {
+        if (mode.cameraFly) {
             view_matrix = glm::rotate(view_matrix, angle_of_rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
         }
         //view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate the camera around the z-axis to position it up
