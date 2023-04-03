@@ -3,5 +3,6 @@ Todo
 - Improve code that does frequency domain transformation
 - Switch over FPS code to use the SFML time code
 - Color the bars (phong shading and lighting?)
-- Camera modes
-- Make it so the number of bars can be dynamically changed
+- Bar circle arrangement
+- Moving bars?
+- Random location bars?

@@ -23,6 +23,7 @@ constexpr unsigned int FRAMES_PER_SECOND = 30;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 constexpr float DEFAULT_SPIN_ANGLE = -50.0f;
 constexpr float DEFAULT_FLY_ANGLE = 25.0f;
+constexpr float DEFAULT_CIRCLE_RADIUS = 1.0f;
 
 std::mutex mtx;
 
@@ -37,16 +38,21 @@ struct Mode {
 
     unsigned int numBars;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS) {
+    bool circleLayout;
+    float circleRadius;
+
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(true), circleRadius(DEFAULT_CIRCLE_RADIUS) {
 
     }
 } mode;
 
 struct Bar {
     float x;
+    float y;
+    float z;
     float height;
 
-    Bar(float x, float height) : x(x), height(height) {
+    Bar(float x, float y, float z, float height) : x(x), y(y), z(z), height(height) {
 
     }
 };
@@ -109,8 +115,22 @@ void genBars(std::vector<Bar>& bars) {
 
     bars.clear();
     bars.reserve(mode.numBars);
-    for (int i = 0 ; i < mode.numBars ; i++)
-        bars.push_back(Bar(-1.0 + ((i + 1) * (bar_width) * 2 - (0.5 * bar_width)), 0.0f));
+
+    if (mode.circleLayout) {
+        double angle = 2 * M_PI / mode.numBars;
+        for (int i = 0; i < mode.numBars; i++) {
+            float x = mode.circleRadius * cos(i * angle);
+            float z = mode.circleRadius * sin(i * angle);
+            std::cout << "x: " << x << " z: " << z << std::endl;
+            bars.push_back(Bar(x, 0, z, 0.0f));
+        }
+
+    } else {
+        for (float i = 0.0f ; i < mode.numBars ; i++) {
+            float x = -1.0f + ((i + 1) * (bar_width) * 2.0f - (0.5 * bar_width));
+            bars.push_back(Bar(x, 0, 0, 0.0f));
+        }
+    }
 }
 
 int main() {
@@ -392,7 +412,7 @@ int main() {
             if (mode.isSpinning) {
                 model_matrix = glm::rotate(model_matrix, angle_of_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
             }
-            model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, 0.0, 0.0));
+            model_matrix = glm::translate(model_matrix, glm::vec3(bar.x, bar.y, bar.z));
             model_matrix = glm::scale(model_matrix, glm::vec3(bar_width, bar.height, 1.0));
 
             barShader.setMat4("model", model_matrix);
