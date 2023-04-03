@@ -22,6 +22,7 @@ constexpr unsigned int NUM_BARS = 30;
 constexpr unsigned int FRAMES_PER_SECOND = 30;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 constexpr float DEFAULT_SPIN_ANGLE = -50.0f;
+constexpr float DEFAULT_FLY_ANGLE = 25.0f;
 
 std::mutex mtx;
 
@@ -32,8 +33,9 @@ struct Mode {
     float spinAngle;
 
     bool cameraFly;
+    float flyAngle;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false) {
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE) {
 
     }
 } mode;
@@ -259,18 +261,18 @@ int main() {
     gui.add(spin_label);
 
     tgui::EditBox::Ptr spin_angle_edit_box = tgui::EditBox::create();
-    spin_angle_edit_box->setPosition(60, 20);
+    spin_angle_edit_box->setSize(40, 20);
+    spin_angle_edit_box->setPosition(100, 20);
     spin_angle_edit_box->onReturnKeyPress([&] {
         float spin_angle_edit_box_value = spin_angle_edit_box->getText().toFloat();
         if (spin_angle_edit_box_value < -360.0f || spin_angle_edit_box_value > 360.0f)
             return;
         mode.spinAngle = spin_angle_edit_box_value;
-        std::cout << mode.spinAngle << std::endl;
     });
     gui.add(spin_angle_edit_box);
 
-    tgui::Label::Ptr spin_angle_label = tgui::Label::create("Angle");
-    spin_angle_label->setPosition(220, 20);
+    tgui::Label::Ptr spin_angle_label = tgui::Label::create("Spin Angle");
+    spin_angle_label->setPosition(150, 20);
     gui.add(spin_angle_label);
 
     tgui::CheckBox::Ptr camera_fly_checkbox = tgui::CheckBox::create();
@@ -286,6 +288,21 @@ int main() {
     tgui::Label::Ptr camera_fly_label = tgui::Label::create("Camera Fly");
     camera_fly_label->setPosition(20, 40);
     gui.add(camera_fly_label);
+
+    tgui::EditBox::Ptr fly_angle_edit_box = tgui::EditBox::create();
+    fly_angle_edit_box->setSize(40, 20);
+    fly_angle_edit_box->setPosition(100, 40);
+    fly_angle_edit_box->onReturnKeyPress([&] {
+        float fly_angle_edit_box_value = fly_angle_edit_box->getText().toFloat();
+        if (fly_angle_edit_box_value < -360.0f || fly_angle_edit_box_value > 360.0f)
+            return;
+        mode.flyAngle = fly_angle_edit_box_value;
+    });
+    gui.add(fly_angle_edit_box);
+
+    tgui::Label::Ptr fly_angle_label = tgui::Label::create("Fly Angle");
+    fly_angle_label->setPosition(150, 40);
+    gui.add(fly_angle_label);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
@@ -337,7 +354,8 @@ int main() {
         view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
         view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f)); // rotate the camera around the x-axis to look down at the origin
         if (mode.cameraFly) {
-            view_matrix = glm::rotate(view_matrix, angle_of_rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
+            float fly_angle_of_rotation = clock.getElapsedTime().asSeconds() * glm::radians(mode.flyAngle);
+            view_matrix = glm::rotate(view_matrix, fly_angle_of_rotation, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate the camera around the y-axis to position it to the right
         }
         //view_matrix = glm::rotate(view_matrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate the camera around the z-axis to position it up
 
