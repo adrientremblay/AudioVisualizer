@@ -363,6 +363,10 @@ int main() {
     circle_layout_checkbox->setPosition(0, 80);
     gui.add(circle_layout_checkbox);
 
+    tgui::Label::Ptr circle_layout_label = tgui::Label::create("Circle");
+    circle_layout_label->setPosition(20, 80);
+    gui.add(circle_layout_label);
+
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
