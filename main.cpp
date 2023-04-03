@@ -38,6 +38,7 @@ struct Bar {
     }
 };
 
+/*
 const float bar_vertices[] = {
         1.0f,  1.0f, 0.0f,  // top right
         1.0f, -1.0f, 0.0f,  // bottom right
@@ -48,6 +49,20 @@ const float bar_vertices[] = {
         1.0f, -1.0f, -0.2f,  // bottom right
         -1.0f, -1.0f, -0.2f,  // bottom left
         -1.0f,  1.0f, -0.2f   // top left
+};
+ */
+
+const float bar_vertices[] = {
+        // vertex position                     // normal vector
+        1.0f,  1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // top right
+        1.0f, -1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // bottom right
+        -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, 1.0f,  // bottom left
+        -1.0f,  1.0f, 0.0f,     0.0f, 0.0f, 1.0f,  // top left
+
+        1.0f,  1.0f, -0.2f,     0.0f, 0.0f, -1.0f, // top right
+        1.0f, -1.0f, -0.2f,     0.0f, 0.0f, -1.0f, // bottom right
+        -1.0f, -1.0f, -0.2f,    0.0f, 0.0f, -1.0f, // bottom left
+        -1.0f,  1.0f, -0.2f,    0.0f, 0.0f, -1.0f  // top left
 };
 
 const unsigned int flat_bar_indices[] = {  // note that we start from 0!
@@ -77,6 +92,39 @@ const unsigned int volume_bar_indices[] = {  // note that we start from 0!
 };
 
 int main() {
+    // Initialize normal vectors for all vertices
+    std::vector<glm::vec3> normals(sizeof(bar_vertices) / sizeof(unsigned int), glm::vec3(0.0f));
+
+    // Compute normal vectors for each face and add to vertex normals
+    for (int i = 0; i < sizeof(volume_bar_indices) / sizeof(unsigned int); i += 3) {
+        //todo: shit code
+        if (i >= sizeof(volume_bar_indices))
+            break;
+
+        unsigned int i1 = volume_bar_indices[i];
+        unsigned int i2 = volume_bar_indices[i+1];
+        unsigned int i3 = volume_bar_indices[i+2];
+
+        glm::vec3 v1 = glm::vec3(bar_vertices[i1], bar_vertices[i1+1], bar_vertices[i1+2]);
+        glm::vec3 v2 = glm::vec3(bar_vertices[i2], bar_vertices[i2+1], bar_vertices[i2+2]);
+        glm::vec3 v3 = glm::vec3(bar_vertices[i3], bar_vertices[i3+1], bar_vertices[i3+2]);
+
+        glm::vec3 edge1 = v2 - v1;
+        glm::vec3 edge2 = v3 - v1;
+        glm::vec3 face_normal = glm::normalize(glm::cross(edge1, edge2));
+
+        normals[i1] += face_normal;
+        normals[i2] += face_normal;
+        normals[i3] += face_normal;
+    }
+
+    // Normalize all vertex normal vectors
+    for (int i = 0; i < normals.size(); i++) {
+        normals[i] = glm::normalize(normals[i]);
+        std::cout << normals[i].x << ' ' << normals[i].y << ' ' << normals[i].z << std::endl;
+    }
+
+
     // Loading song
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("../audio/raver.wav")) {
@@ -130,9 +178,13 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(bar_vertices) , bar_vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // set vertex position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // set vertex normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
 
     // VAO stuff for light
     glBindVertexArray(lightVAO);
@@ -140,7 +192,7 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // set the vertex attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Default Mode is 2D
@@ -236,6 +288,7 @@ int main() {
 
             barShader.setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
             barShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
+            barShader.setVec3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
 
             // draw the bar
             glBindVertexArray(VAO);
@@ -264,6 +317,16 @@ int main() {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
         }
     }
+
+    // todo cleanup stuff?
+    /*
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
+     */
 
     return 0;
 }
