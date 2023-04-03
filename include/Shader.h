@@ -32,7 +32,7 @@ public:
 
     void setVec3f(const std::string &name, float f1, float f2, float f3) const;
 
-    void setMat4(const std::string &name, glm::mat4 matrix) const;
+    void setMat4(const std::string &name, const glm::mat4& matrix) const;
 };
 
 
