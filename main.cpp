@@ -255,7 +255,7 @@ int main() {
     gui.add(spin_label);
 
     tgui::EditBox::Ptr spin_angle_edit_box = tgui::EditBox::create();
-    spin_angle_edit_box->setPosition(40, 20);
+    spin_angle_edit_box->setPosition(60, 20);
     spin_angle_edit_box->onReturnKeyPress([&] {
         float spin_angle_edit_box_value = spin_angle_edit_box->getText().toFloat();
         if (spin_angle_edit_box_value < -360.0f || spin_angle_edit_box_value > 360.0f)
@@ -264,6 +264,11 @@ int main() {
         std::cout << mode.spinAngle << std::endl;
     });
     gui.add(spin_angle_edit_box);
+
+
+    tgui::Label::Ptr spin_angle_label = tgui::Label::create("Angle");
+    spin_angle_label->setPosition(220, 20);
+    gui.add(spin_angle_label);
 
     // Setting up bars
     float bar_width = (1.0f / NUM_BARS);
