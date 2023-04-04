@@ -10,9 +10,7 @@
 
 class Model {
 public:
-    Model(char *path) {
-        loadModel(path);
-    }
+    Model(char *path);
     void Draw(Shader &shader);
 private:
     // model data
