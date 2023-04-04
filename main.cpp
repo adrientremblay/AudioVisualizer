@@ -353,6 +353,7 @@ int main() {
     Model suzanne(std::string("../models/suzanne.obj").c_str());
     glm::mat4 monkey_model_matrix(1.0f);
     monkey_model_matrix = glm::scale(monkey_model_matrix, glm::vec3(0.25f, 0.25f, 0.25f));
+    //monkey_model_matrix = glm::rotate(monkey_model_matrix, -45.0f, glm::vec3(1.0f, 0.0f, 0.0f)); // make monkey face cam
 
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
@@ -437,6 +438,17 @@ int main() {
 
         // drawing models
         if (mode.drawMonkey) {
+            Mesh& mesh = suzanne.meshes.front();
+            std::vector<Vertex>& suz_verts = mesh.vertices;
+            std::vector<Vertex>& suz_changed_verts = mesh.changedVertices;
+
+            // messing with the vertices
+            for (int i = 0 ; i < mode.realConsiderationLen ; i++) {
+                float frequency_mag = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
+
+                suz_changed_verts[i].Position = suz_verts[i].Position + (suz_verts[i].Normal * frequency_mag);
+            }
+
             monkeyShader.setMat4("model", monkey_model_matrix);
             monkeyShader.setMat4("view", view_matrix);
             monkeyShader.setMat4("projection", projection_matrix);
