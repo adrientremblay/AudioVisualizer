@@ -147,6 +147,7 @@ int main() {
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
     fftStream.setVolume(0);
+    fftStream.setLoop(true);
 
     // Creating OpenGL window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer", sf::Style::Default, sf::ContextSettings(24, 8, 0, 3, 3));
@@ -205,7 +206,7 @@ int main() {
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
-    glm::vec3 lightPos(1.0f, 0.5f, 0.0f);
+    glm::vec3 lightPos(0.0f, 0.5f, 0.0f);
     glm::mat4 light_model_matrix = glm::mat4(1.0f);
     light_model_matrix = glm::translate(light_model_matrix, lightPos);
     light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.1f));
