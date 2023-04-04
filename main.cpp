@@ -149,10 +149,13 @@ int main() {
     fftStream.setVolume(0);
 
     // Creating OpenGL window
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Audio Visualizer", sf::Style::Default, sf::ContextSettings(24, 8, 0, 3, 3));
     glEnable(GL_TEXTURE_2D);
     tgui::Gui gui{window};
     window.setActive(true);
+
+    // Depth testing stuff
+    glEnable(GL_DEPTH_TEST);
 
     // Initialize GLEW
     glewInit();
@@ -211,9 +214,6 @@ int main() {
     sf::Time time;
 
     // Enable Depth Testing
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glDepthMask(GL_TRUE);
 
     // Setting up bars
     std::vector<Bar> bars;
