@@ -57,57 +57,57 @@ struct Bar {
     }
 };
 
-/*
-const float bar_vertices[] = {
-        1.0f,  1.0f, 0.0f,  // top right
-        1.0f, -1.0f, 0.0f,  // bottom right
-        -1.0f, -1.0f, 0.0f,  // bottom left
-        -1.0f,  1.0f, 0.0f,   // top left
-
-        1.0f,  1.0f, -0.2f,  // top right
-        1.0f, -1.0f, -0.2f,  // bottom right
-        -1.0f, -1.0f, -0.2f,  // bottom left
-        -1.0f,  1.0f, -0.2f   // top left
-};
- */
-
-float bar_vertices[] = {
-        // vertex position                     // normal vector
-        1.0f,  1.0f, 1.0f,      0.0f, 0.0f, 0.0f,  // top right
-        1.0f, -1.0f, 1.0f,      0.0f, 0.0f, 0.0f,  // bottom right
-        -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 0.0f,  // bottom left
-        -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 0.0f,  // top left
-
-        1.0f,  1.0f, -1.0f,     0.0f, 0.0f, 0.0f, // top right
-        1.0f, -1.0f, -1.0f,     0.0f, 0.0f, 0.0f, // bottom right
-        -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, 0.0f, // bottom left
-        -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, 0.0f  // top left
+float flat_bar_vertices[] = {
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
 };
 
-const unsigned int flat_bar_indices[] = {  // note that we start from 0!
-        0, 1, 2,
-        2, 3, 0,
-};
+float volume_bar_vertices[] = {
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
 
-const unsigned int volume_bar_indices[] = {  // note that we start from 0!
-        // Front face
-        0, 1, 2,
-        2, 3, 0,
-        // Back face
-        4, 5, 6,
-        6, 7, 4,
-        // Left face
-        3, 2, 6,
-        6, 7, 3,
-        // Right face
-        0, 1, 5,
-        5, 4, 0,
-        // Top face
-        4, 0, 3,
-        3, 7, 4,
-        // Bottom face
-        1, 5, 6,
-        6, 2, 1
+        -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+        1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+        1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+        1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+        -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+
+        -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
+        -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f,
+        -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f,
+        -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f,
+        -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
+        -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
+
+        1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
+        1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f,
+        1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,
+        1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,
+        1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
+        1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
+
+        -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f,
+        1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f,
+        1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
+        1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
+        -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
+        -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f,
+
+        -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f
 };
 
 void genBars(std::vector<Bar>& bars) {
@@ -133,37 +133,6 @@ void genBars(std::vector<Bar>& bars) {
 }
 
 int main() {
-    // Step 1: Initialize normal vectors
-    std::vector<glm::vec3> normals(8, glm::vec3(0.0f, 0.0f, 0.0f));
-
-    // Step 2: Calculate face normals
-    for (int i = 0; i < 36; i += 3) {
-        unsigned int index1 = volume_bar_indices[i];
-        unsigned int index2 = volume_bar_indices[i + 1];
-        unsigned int index3 = volume_bar_indices[i + 2];
-
-        glm::vec3 v1(bar_vertices[index1 * 6], bar_vertices[index1 * 6 + 1], bar_vertices[index1 * 6 + 2]);
-        glm::vec3 v2(bar_vertices[index2 * 6], bar_vertices[index2 * 6 + 1], bar_vertices[index2 * 6 + 2]);
-        glm::vec3 v3(bar_vertices[index3 * 6], bar_vertices[index3 * 6 + 1], bar_vertices[index3 * 6 + 2]);
-
-        glm::vec3 edge1 = v2 - v1;
-        glm::vec3 edge2 = v3 - v1;
-        glm::vec3 face_normal = glm::cross(edge1, edge2);
-
-        normals[index1] = face_normal;
-        normals[index2] = face_normal;
-        normals[index3] = face_normal;
-    }
-
-    // Step 3: Normalize normal vectors
-    for (int i = 0; i < 8; i++) {
-        normals[i] = glm::normalize(normals[i]);
-        std::cout << normals[i].x << ' ' << normals[i].y << ' ' << normals[i].z << std::endl;
-        bar_vertices[i*6 + 3 + 0] = normals[i].x;
-        bar_vertices[i*6 + 3 + 1] = normals[i].y;
-        bar_vertices[i*6 + 3 + 2] = normals[i].z;
-    }
-
     // Loading song
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("../audio/raver.wav")) {
@@ -196,8 +165,6 @@ int main() {
     glGenBuffers(1, &VBO);
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
     unsigned int lightVAO;
     glGenVertexArrays(1, &lightVAO);
 
@@ -214,21 +181,18 @@ int main() {
     // VAO stuff for bars
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(bar_vertices) , bar_vertices, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(flat_bar_vertices) , flat_bar_vertices, GL_DYNAMIC_DRAW);
     // set vertex position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // set vertex normal attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
 
     // VAO stuff for light
     glBindVertexArray(lightVAO);
     // we only need to bind to the VBO, the container's VBO's data already contains the data.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // set the vertex attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -238,7 +202,7 @@ int main() {
     //glm::mat4 projection_matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
     glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
-    glm::vec3 lightPos(0.0f, 0.5f, 0.0f);
+    glm::vec3 lightPos(1.0f, 0.5f, 0.0f);
     glm::mat4 light_model_matrix = glm::mat4(1.0f);
     light_model_matrix = glm::translate(light_model_matrix, lightPos);
     light_model_matrix = glm::scale(light_model_matrix, glm::vec3(0.1f));
@@ -261,13 +225,13 @@ int main() {
     tgui::CheckBox::Ptr dimension_checkbox = tgui::CheckBox::create();
     dimension_checkbox->onCheck([&]() {
         mode.is3d = true;
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(volume_bar_indices), volume_bar_indices, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(volume_bar_vertices) , volume_bar_vertices, GL_DYNAMIC_DRAW);
     });
     dimension_checkbox->onUncheck([&]() {
         mode.is3d = false;
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(flat_bar_indices), flat_bar_indices, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(flat_bar_vertices) , flat_bar_vertices, GL_DYNAMIC_DRAW);
     });
     gui.add(dimension_checkbox);
 
@@ -441,9 +405,9 @@ int main() {
             // draw the bar
             glBindVertexArray(VAO);
             if (mode.is3d)
-                glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
             else
-                glDrawElements(GL_TRIANGLES, sizeof(flat_bar_indices), GL_UNSIGNED_INT, 0);
+                glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
         }
 
@@ -455,7 +419,10 @@ int main() {
         lightShader.setMat4("projection", projection_matrix);
 
         glBindVertexArray(lightVAO);
-        glDrawElements(GL_TRIANGLES, sizeof(volume_bar_indices), GL_UNSIGNED_INT, 0);
+        if (mode.is3d)
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        else
+            glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
 
         // drawing gui
