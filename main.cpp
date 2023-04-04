@@ -136,7 +136,7 @@ int main() {
     // Loading song
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("../audio/raver.wav")) {
-        std::cerr << "Could not load RAVER.mp3!!!" << std::endl;
+        std::cerr << "Could not load RAVER.wav!!!" << std::endl;
         return -1;
     }
 
