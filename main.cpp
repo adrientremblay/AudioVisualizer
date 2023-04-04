@@ -44,7 +44,9 @@ struct Mode {
 
     unsigned int realConsiderationLen;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(false), circleRadius(DEFAULT_CIRCLE_RADIUS), realConsiderationLen(FFTStream::CONSIDERATION_LENGTH / 1) {
+    bool drawMonkey;
+
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(false), circleRadius(DEFAULT_CIRCLE_RADIUS), realConsiderationLen(FFTStream::CONSIDERATION_LENGTH), drawMonkey(false) {
 
     }
 } mode;
@@ -333,6 +335,16 @@ int main() {
     circle_layout_label->setPosition(20, 80);
     gui.add(circle_layout_label);
 
+    tgui::CheckBox::Ptr draw_monkey_checkbox = tgui::CheckBox::create();
+    draw_monkey_checkbox->onCheck([&]() {
+        mode.drawMonkey = true;
+    });
+    draw_monkey_checkbox->onUncheck([&]() {
+        mode.drawMonkey = false;
+    });
+    draw_monkey_checkbox->setPosition(0, 100);
+    gui.add(draw_monkey_checkbox);
+
     // Model loading
     Model suzanne(std::string("../models/suzanne.obj").c_str());
     glm::mat4 monkey_model_matrix(1.0f);
@@ -420,14 +432,16 @@ int main() {
         }
 
         // drawing models
-        monkeyShader.setMat4("model", monkey_model_matrix);
-        monkeyShader.setMat4("view", view_matrix);
-        monkeyShader.setMat4("projection", projection_matrix);
+        if (mode.drawMonkey) {
+            monkeyShader.setMat4("model", monkey_model_matrix);
+            monkeyShader.setMat4("view", view_matrix);
+            monkeyShader.setMat4("projection", projection_matrix);
 
-        monkeyShader.setVec3f("objectColor", 0.31f, 1.0f, 0.31f);
-        monkeyShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
-        monkeyShader.setVec3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
-        suzanne.Draw(monkeyShader);
+            monkeyShader.setVec3f("objectColor", 0.31f, 1.0f, 0.31f);
+            monkeyShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
+            monkeyShader.setVec3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+            suzanne.Draw(monkeyShader);
+        }
 
         // Draw the light source
         lightShader.use();
