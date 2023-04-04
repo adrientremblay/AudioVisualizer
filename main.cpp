@@ -42,7 +42,9 @@ struct Mode {
     bool circleLayout;
     float circleRadius;
 
-    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(false), circleRadius(DEFAULT_CIRCLE_RADIUS) {
+    unsigned int realConsiderationLen;
+
+    Mode() : is3d(false), isSpinning(false), spinAngle(DEFAULT_SPIN_ANGLE), cameraFly(false), flyAngle(DEFAULT_FLY_ANGLE), numBars(DEFAULT_NUM_BARS), circleLayout(false), circleRadius(DEFAULT_CIRCLE_RADIUS), realConsiderationLen(FFTStream::CONSIDERATION_LENGTH / 1) {
 
     }
 } mode;
@@ -361,8 +363,8 @@ int main() {
         }
 
         // Calculating bar heights
-        const float frequencySpectrumToBinsScaleFactor = FFTStream::CONSIDERATION_LENGTH / (float)mode.numBars;
-        for (int i = 0 ; i < FFTStream::CONSIDERATION_LENGTH ; i++) {
+        const float frequencySpectrumToBinsScaleFactor = mode.realConsiderationLen / (float)mode.numBars;
+        for (int i = 0 ; i < mode.realConsiderationLen ; i++) {
             int bar_index = floor(i / frequencySpectrumToBinsScaleFactor);
 
             float frequency_mag = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
