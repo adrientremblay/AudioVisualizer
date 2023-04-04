@@ -334,6 +334,7 @@ int main() {
     // Model loading
     Model suzanne(std::string("../models/suzanne.obj").c_str());
     glm::mat4 monkey_model_matrix(1.0f);
+    monkey_model_matrix = glm::scale(monkey_model_matrix, glm::vec3(0.25f, 0.25f, 0.25f));
 
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
