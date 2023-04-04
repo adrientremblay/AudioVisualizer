@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(AudioVisualizer VERSION 0.1)
 
 # Set build type
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -34,7 +34,7 @@ link_libraries     (PkgConfig::FFTW)
 find_package(OpenGL REQUIRED)
 
 # Compile executable
-add_executable(${PROJECT_NAME} lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp lib/imgui/imgui.cpp lib/imgui/imgui_demo.cpp lib/imgui/imgui_draw.cpp lib/imgui/imgui_tables.cpp lib/imgui/imgui_widgets.cpp)
+add_executable(${PROJECT_NAME} lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp lib/stb_image/stb_image.cpp)
 
 # Set include directory search paths
 target_include_directories(${PROJECT_NAME}
