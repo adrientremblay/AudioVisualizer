@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "include/Shader.h"
+#include "include/Model.h"
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-OpenGL3.hpp>
 
@@ -329,6 +330,9 @@ int main() {
     circle_layout_label->setPosition(20, 80);
     gui.add(circle_layout_label);
 
+    // Model loading
+    Model suzanne(std::string("../models/suzanne.obj").c_str());
+
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
     unsigned long sleep_time = 0;
@@ -409,6 +413,9 @@ int main() {
                 glDrawArrays(GL_TRIANGLES, 0, 6);
             glBindVertexArray(0);
         }
+
+        // drawing models
+        suzanne.Draw(barShader);
 
         // Draw the light source
         lightShader.use();

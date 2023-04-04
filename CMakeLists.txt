@@ -34,7 +34,7 @@ link_libraries     (PkgConfig::FFTW)
 find_package(OpenGL REQUIRED)
 
 # Compile executable
-add_executable(${PROJECT_NAME} lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp lib/stb_image/stb_image.cpp)
+add_executable(${PROJECT_NAME} src/Model.cpp src/Mesh.cpp lib/glad/glad.c main.cpp src/FFTStream.cpp src/Shader.cpp lib/stb_image/stb_image.cpp)
 
 # Set include directory search paths
 target_include_directories(${PROJECT_NAME}

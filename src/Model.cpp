@@ -8,7 +8,7 @@
 #include <assimp/postprocess.h>
 #include "../lib/stb_image/stb_image.h"
 
- Model::Model(char *path) {
+ Model::Model(const char* path) {
     loadModel(path);
 }
 
