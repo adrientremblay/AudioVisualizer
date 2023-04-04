@@ -461,6 +461,7 @@ int main() {
         }
 
         // Draw the light source
+        /*
         lightShader.use();
 
         lightShader.setMat4("model", light_model_matrix);
@@ -473,6 +474,7 @@ int main() {
         else
             glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
+         */
 
         // drawing gui
         gui.draw();
