@@ -7,7 +7,7 @@ uniform vec3 lightColor;
 uniform vec3 lightPos;
 
 void main() {
-   float ambientFactor = 0.2;
+   float ambientFactor = 0.3;
    vec3 ambient = ambientFactor * lightColor;
 
    vec3 norm = normalize(Normal);
