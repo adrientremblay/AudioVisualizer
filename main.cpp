@@ -214,8 +214,6 @@ int main() {
     sf::Clock clock;
     sf::Time time;
 
-    // Enable Depth Testing
-
     // Setting up bars
     std::vector<Bar> bars;
     genBars(bars);

@@ -84,10 +84,12 @@ void FFTStream::calculateFrequencySpectrum() {
     for (int i = 0; i < CONSIDERATION_LENGTH; i++) {
         double amp = sqrt(output[i][REAL] * output[i][REAL] + output[i][IMAG] * output[i][IMAG]);
 
-        //float avg = (amp + last_output[i]) / 2;
+        /*
+        float avg = (amp + last_output[i]) / 2;
 
-        //normalizedFrequencySpectrum[i] = 20 * log10(avg / peak);
-        //last_output[i] = avg;
+        normalizedFrequencySpectrum[i] = 20 * log10(avg / peak);
+        last_output[i] = avg;
+         */
 
         normalizedFrequencySpectrum[i] = amp;
     }
