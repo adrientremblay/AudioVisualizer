@@ -165,6 +165,7 @@ int main() {
     // Creating the Shader object
     Shader barShader("../shaders/vertex_shader.vert", "../shaders/fragment_shader.frag");
     Shader lightShader("../shaders/vertex_shader.vert", "../shaders/light_fragment_shader.frag");
+    Shader monkeyShader("../shaders/vertex_shader.vert", "../shaders/fragment_shader.frag");
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
@@ -332,6 +333,7 @@ int main() {
 
     // Model loading
     Model suzanne(std::string("../models/suzanne.obj").c_str());
+    glm::mat4 monkey_model_matrix(1.0f);
 
     sf::Clock deltaClock;
     unsigned long next_game_tick = std::chrono::system_clock::now().time_since_epoch().count();
@@ -415,7 +417,14 @@ int main() {
         }
 
         // drawing models
-        suzanne.Draw(barShader);
+        monkeyShader.setMat4("model", monkey_model_matrix);
+        monkeyShader.setMat4("view", view_matrix);
+        monkeyShader.setMat4("projection", projection_matrix);
+
+        monkeyShader.setVec3f("objectColor", 0.31f, 1.0f, 0.31f);
+        monkeyShader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
+        monkeyShader.setVec3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+        suzanne.Draw(monkeyShader);
 
         // Draw the light source
         lightShader.use();
