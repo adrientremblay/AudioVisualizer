@@ -151,7 +151,7 @@ int main() {
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
-    //fftStream.setVolume(0);
+    fftStream.setVolume(0);
     fftStream.setLoop(true);
 
     // Creating OpenGL window
@@ -331,7 +331,7 @@ int main() {
     circle_layout_checkbox->setPosition(0, 80);
     gui.add(circle_layout_checkbox);
 
-    tgui::Label::Ptr circle_layout_label = tgui::Label::create("Circle");
+    tgui::Label::Ptr circle_layout_label = tgui::Label::create("Circle Mode");
     circle_layout_label->setPosition(20, 80);
     gui.add(circle_layout_label);
 
@@ -344,6 +344,10 @@ int main() {
     });
     draw_monkey_checkbox->setPosition(0, 100);
     gui.add(draw_monkey_checkbox);
+
+    tgui::Label::Ptr draw_monkey_label = tgui::Label::create("Draw Monkey");
+    draw_monkey_label->setPosition(20, 100);
+    gui.add(draw_monkey_label);
 
     // Model loading
     Model suzanne(std::string("../models/suzanne.obj").c_str());
