@@ -25,6 +25,7 @@ const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 constexpr float DEFAULT_SPIN_ANGLE = -50.0f;
 constexpr float DEFAULT_FLY_ANGLE = 25.0f;
 constexpr float DEFAULT_CIRCLE_RADIUS = 1.0f;
+constexpr float MONKEY_CAP = 0.5f;
 
 std::mutex mtx;
 
@@ -151,7 +152,7 @@ int main() {
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
-    fftStream.setVolume(0);
+    //fftStream.setVolume(0);
     fftStream.setLoop(true);
 
     // Creating OpenGL window
@@ -444,7 +445,7 @@ int main() {
 
             // messing with the vertices
             for (int i = 0 ; i < mode.realConsiderationLen ; i++) {
-                float frequency_mag = abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING;
+                float frequency_mag = std::min(abs(normalizedFrequencySpectrum[i]) * BAR_HEIGHT_SCALING * 10.0f, MONKEY_CAP);
 
                 suz_changed_verts[i].Position = suz_verts[i].Position + (suz_verts[i].Normal * frequency_mag);
             }
