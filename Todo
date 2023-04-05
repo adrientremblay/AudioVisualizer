@@ -2,8 +2,5 @@ Todo
 - Do more research on frequency domain transformation
 - Improve code that does frequency domain transformation
 - Switch over FPS code to use the SFML time code
-- Color the bars (phong shading and lighting?)
 - Moving bars?
 - Random location bars?
-- Make the music loop
-- Hard code the normals?
