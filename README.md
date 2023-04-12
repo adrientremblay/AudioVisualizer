@@ -17,3 +17,24 @@ as a wireframe and moves vertices along their normals depending on the frequency
 The rendering is done directly using OpenGL. The SFML library was used to create a window context and also for some 
 audio processing functionality. The FFTW library was used for the fourier transform stuff to determine the frequency
 amplitudes. Additionally, the Assimp library was used for model loading, and the TGUI library was used for the GUI.
+
+## Running
+
+1. Clone the repo
+2. Install SFML. On Debian based distros do:
+    ```sudo apt install libsfml-dev```
+3. Install FFTW. On Debian based distros do:
+    ```sudo apt install libfftw3-dev```
+4. Install Assimp. On Debian based distros do:
+    ```sudo apt install libassimp-dev```
+4. Install SDL2. On Debian based distros do:
+   ```sudo apt install libsdl2-dev```
+5. Install TGUI. On Debian based distros do:
+    ```
+   sudo add-apt-repository ppa:texus/tgui
+   sudo apt update
+   sudo apt install libtgui-1.0-dev
+    ```
+6. Install SDL2_TTF. On Debian based distros do:
+    ```sudo apt-get install libsdl2-ttf-dev```
+7. Copy the /glad folder to /usr/include on Debian based distros or install Glad on whatever operating system you're on
