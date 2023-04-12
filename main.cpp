@@ -141,7 +141,7 @@ void genBars(std::vector<Bar>& bars) {
 int main() {
     // Loading song
     sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile("../audio/Noisemaker.wav")) {
+    if (!buffer.loadFromFile("../audio/heartless.wav")) {
         std::cerr << "Could not load song!!!" << std::endl;
         return -1;
     }
@@ -152,7 +152,7 @@ int main() {
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
-    fftStream.setVolume(0);
+    fftStream.setVolume(50);
     fftStream.setLoop(true);
 
     // Creating OpenGL window
