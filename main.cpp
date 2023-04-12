@@ -152,7 +152,7 @@ int main() {
     fftStream.load(buffer);
     fftStream.setCtx(normalizedFrequencySpectrum);
     fftStream.play();
-    fftStream.setVolume(50);
+    fftStream.setVolume(100);
     fftStream.setLoop(true);
 
     // Creating OpenGL window
